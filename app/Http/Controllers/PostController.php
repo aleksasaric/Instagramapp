@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Profile;
+use App\Post;
 use Illuminate\Http\Request;
 
-class ProfileController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-
+        //
     }
 
     /**
@@ -41,33 +41,33 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Profile  $profile
+     * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Profile $profile)
+    public function show(Post $post)
     {
-        return view('profile.index');
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Profile  $profile
+     * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(Profile $profile)
+    public function edit(Post $post)
     {
-        return view('profile.edit', compact('profile'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Profile  $profile
+     * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Profile $profile)
+    public function update(Request $request, Post $post)
     {
         //
     }
@@ -75,10 +75,10 @@ class ProfileController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Profile  $profile
+     * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Profile $profile)
+    public function destroy(Post $post)
     {
         //
     }

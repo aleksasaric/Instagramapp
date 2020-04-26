@@ -1,13 +1,12 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Example Component</div>
-
-                    <div class="card-body">
-                        I'm an example component.
-                    </div>
+        <div class="profile">
+            <div class="profile__header">
+                <div class="profile__picture">
+                    <img src="/storage/images/aleksa.jpg" alt="profie picture">
+                </div>
+                <div class="profile__information">
+                    <div class="profile"></div>
                 </div>
             </div>
         </div>
@@ -21,3 +20,8 @@
         }
     }
 </script>
+<style scoped>
+    .profile__picture{
+        width: 400px;
+    }
+</style>
