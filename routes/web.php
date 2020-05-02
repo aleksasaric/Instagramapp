@@ -17,8 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/profile', 'ProfileController@show');
-Route::get('/profile/edit', 'ProfileController@edit');
+Route::get('/profile/edit', 'ProfileController@edit')->middleware('auth');
+Route::get('/profile/{username}', 'ProfileController@show')->middleware('auth');
 
 
 Auth::routes();

@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-        <profile></profile>
+        <profile :prof="{{json_encode($profile)}}"></profile>
 @endsection

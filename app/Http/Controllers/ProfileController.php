@@ -2,11 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\ProfileRepositoryInterface;
 use App\Profile;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
+
+    /**
+     * @var ProfileRepositoryInterface
+     */
+    private $profile;
+
+    public function __construct(ProfileRepositoryInterface $profile)
+    {
+        $this->profile = $profile;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -41,12 +55,20 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Profile  $profile
+     * @param $username
      * @return \Illuminate\Http\Response
      */
-    public function show(Profile $profile)
+    public function show($username)
     {
-        return view('profile.index');
+        $profile = $this->profile->getByUsername($username);
+
+        if (!$profile) abort(404);
+
+        if (Auth::user()->profile == $profile){
+            $profile['owner'] = 1;
+        }
+
+        return view('profile.index', compact('profile'));
     }
 
     /**
@@ -57,6 +79,7 @@ class ProfileController extends Controller
      */
     public function edit(Profile $profile)
     {
+        $profile = Auth::user()->profile;
         return view('profile.edit', compact('profile'));
     }
 

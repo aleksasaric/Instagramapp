@@ -7,7 +7,7 @@
                 </div>
                 <div class="profile__information">
                     <div class="profile__information__header">
-                        <p>aleksasaric21</p>
+                        <p>{{profile.username}}</p>
                         <button><a href="/profile/edit">Edit Profile</a></button>
                     </div>
                     <div class="profile__information__body">
@@ -18,8 +18,8 @@
                         </ul>
                     </div>
                     <div class="profile__information__footer">
-                        <p><span class="bold">Aleksa Saric</span></p>
-                        <p>Faculty of Organizational Sciences</p>
+                        <p><span class="bold">{{profile.name}}</span></p>
+                        <p>{{profile.bio}}</p>
                     </div>
 
                 </div>
@@ -27,7 +27,7 @@
 
             <div class="profile__middle"></div>
             <div class="profile__pictures">
-                <div class="profile__pictures__container">
+                <div @click="openPost(1)" class="profile__pictures__container">
                     <img src="/storage/images/aleksa.jpg" alt="">
                 </div>
                 <div class="profile__pictures__container">
@@ -42,12 +42,33 @@
             </div>
 
         </div>
+        <transition name="fade" mode="out-in">
+            <post-modal v-if="showModal" :post="this.selectedPost"  @closeConfirmation="showModal = false">
+                <!--@deleteItem="deleteCourse"-->
+            </post-modal>
+        </transition>
     </div>
 </template>
 
 <script>
     export default {
-        name: "Profile"
+        name: "Profile",
+        props:{
+            prof: null,
+        },
+        data(){
+            return {
+                profile: this.prof,
+                showModal: false,
+                selectedPost: null,
+            }
+        },
+        methods:{
+            openPost(post){
+                this.selectedPost = post;
+                this.showModal = true;
+            }
+        }
     }
 </script>
 
@@ -132,6 +153,7 @@
                 margin:10px;
                 width: calc(100%/3 - #{23px});
                 display: inline-block;
+                cursor: pointer;
             }
             &__container img{
                 width: 100%;

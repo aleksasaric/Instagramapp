@@ -16,37 +16,37 @@
                             <img src="/storage/images/aleksa.jpg" alt="">
                         </div>
                         <div class="change-picture">
-                            <p class="change-picture-name">aleksasaric21</p>
+                            <p class="change-picture-name">{{ this.prof.username }}</p>
                             <p class="change-picture-profile">Change Profile Photo</p>
                         </div>
                     </div>
 
                     <div class="row-input">
                         <label for="row1">Name</label>
-                        <input id="row1" type="text">
+                        <input v-model="editProfile.name" id="row1" type="text">
                     </div>
                     <div class="row-input">
                         <label for="row2">Username</label>
-                        <input id="row2" type="text">
+                        <input v-model="editProfile.username" id="row2" type="text">
                     </div>
                     <div class="row-input">
                         <label for="row3">Website</label>
-                        <input id="row3" type="text">
+                        <input v-model="editProfile.website" id="row3" type="text">
                     </div>
                     <div class="row-input">
                         <label for="row4">Bio</label>
-                        <input id="row4" type="text">
+                        <input v-model="editProfile.bio"  id="row4" type="text">
                     </div>
                     <div class="row-input">
                         <label for="row5">Email</label>
-                        <input id="row5" type="email">
+                        <input v-model="editProfile.email" id="row5" type="email">
                     </div>
                     <div class="row-input">
                         <label for="row6">Gender</label>
-                        <input id="row6" type="text">
+                        <input v-model="editProfile.gender" id="row6" type="text">
                     </div>
                     <div class="row-input">
-                       <button>Submit</button>
+                       <button @click="updateProfile()">Submit</button>
                     </div>
                     <!--</div>-->
                 </div>
@@ -55,7 +55,7 @@
                     <div class="privacy">
                         <h2>Account Privacy</h2>
                         <input id="checkbox-1" type="checkbox">
-                        <label for="checkbox-1">Private Account</label>
+                        <label v-model="editProfile.privateAccount" for="checkbox-1">Private Account</label>
                         <p>When your account is private, only people you approve can see your photos and videos on Instagram. Your existing followers won't be affected.
                         </p>
                     </div>
@@ -67,23 +67,23 @@
                             <img src="/storage/images/aleksa.jpg" alt="">
                         </div>
                         <div style="padding-right:50px; line-height:40px" class="change-picture">
-                            <p class="change-picture-name">aleksasaric21</p>
+                            <p class="change-picture-name">{{ this.prof.username }}</p>
                         </div>
                     </div>
                     <div class="row-input">
                         <label for="password">Old Password</label>
-                        <input id="password" type="password">
+                        <input v-model="editProfile.oldPassword" id="password" type="password">
                     </div>
                     <div class="row-input">
                         <label for="password-new">New Password</label>
-                        <input id="password-new" type="password">
+                        <input v-model="editProfile.password" id="password-new" type="password">
                     </div>
                     <div class="row-input">
                         <label for="password-conform">Conform New Password</label>
-                        <input id="password-conform" type="password">
+                        <input v-model="editProfile.confirmPassword" id="password-conform" type="password">
                     </div>
                     <div class="row-input">
-                        <button>Change Password</button>
+                        <button @click="updateProfile()">Change Password</button>
                     </div>
                 </div>
             </div>
@@ -94,15 +94,45 @@
 <script>
     export default {
         name: "EditProfile.vue",
+        props:{
+            prof:{}
+        },
         data(){
             return {
                 activeTab: 1,
+                profile: this.prof,
+                editProfile:{
+                    password: '',
+                    oldPassword: '',
+                    confirmPassword: '',
+                },
             }
         },
         methods:{
             activateTab(tabNumber){
                 this.activeTab = tabNumber;
-            }
+            },
+            updateProfile(){
+                axios.post('/api/v1/profile/update', this.editProfile)
+                    .then(response => {
+                        console.log('here');
+                        if(response.data.status_code === 201) {
+                            console.log('201');
+                        }
+                    });
+            },
+        },
+        created() {
+            this.$set(this.editProfile, 'id', this.prof.id);
+            this.$set(this.editProfile, 'name', this.prof.name);
+            this.$set(this.editProfile, 'username', this.prof.username);
+            this.$set(this.editProfile, 'image', this.prof.image);
+            this.$set(this.editProfile, 'website', this.prof.website);
+            this.$set(this.editProfile, 'bio', this.prof.bio);
+            this.$set(this.editProfile, 'email', this.prof.email);
+            this.$set(this.editProfile, 'gender', this.prof.gender);
+            this.$set(this.editProfile, 'privateAccount', this.prof.is_private);
+            this.$set(this.editProfile, 'user_id', this.prof.user_id);
         }
     }
 </script>
