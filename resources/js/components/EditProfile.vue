@@ -72,21 +72,27 @@
                     </div>
                     <div class="row-input">
                         <label for="password">Old Password</label>
-                        <input v-model="editProfile.oldPassword" id="password" type="password">
+                        <input required v-model="editProfile.oldPassword" id="password" type="password">
                     </div>
                     <div class="row-input">
                         <label for="password-new">New Password</label>
-                        <input v-model="editProfile.password" id="password-new" type="password">
+                        <input required v-model="editProfile.password" id="password-new" type="password">
                     </div>
                     <div class="row-input">
                         <label for="password-conform">Conform New Password</label>
-                        <input v-model="editProfile.confirmPassword" id="password-conform" type="password">
+                        <input required v-model="editProfile.confirmPassword" id="password-conform" type="password">
                     </div>
                     <div class="row-input">
                         <button @click="updateProfile()">Change Password</button>
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-if="showSuccess">
+            <success-alert></success-alert>
+        </div>
+        <div v-if="showError">
+            <error-alert :message="this.errorMessage" @alertClose="closeAlert()"></error-alert>
         </div>
     </div>
 </template>
@@ -100,6 +106,9 @@
         data(){
             return {
                 activeTab: 1,
+                errorMessage: '',
+                showError: false,
+                showSuccess: false,
                 profile: this.prof,
                 editProfile:{
                     password: '',
@@ -109,10 +118,26 @@
             }
         },
         methods:{
+            closeAlert(){
+              this.showError = false;
+              this.showSuccess = false;
+              this.errorMessage = '';
+            },
             activateTab(tabNumber){
                 this.activeTab = tabNumber;
             },
+            passwordMatch(){
+                if (this.editProfile.password === this.editProfile.password) {
+                    this.showError = true;
+                    this.errorMessage = 'Password do not match';
+                    return false;
+                }
+                return true;
+            },
             updateProfile(){
+                if (!this.passwordMatch()){
+                    return;
+                }
                 axios.post('/api/v1/profile/update', this.editProfile)
                     .then(response => {
                         console.log('here');
@@ -121,6 +146,9 @@
                         }
                     });
             },
+        },
+        mounted(){
+
         },
         created() {
             this.$set(this.editProfile, 'id', this.prof.id);
