@@ -3,16 +3,23 @@
         <div class="profile">
             <div class="profile__header">
                 <div class="profile__picture">
-                    <img src="/storage/images/aleksa.jpg" alt="profie picture">
+                    <a href="/profile/edit">
+                        <img src="/storage/images/aleksa.jpg" alt="profie picture">
+                    </a>
                 </div>
                 <div class="profile__information">
                     <div class="profile__information__header">
                         <p>{{profile.username}}</p>
-                        <button><a href="/profile/edit">Edit Profile</a></button>
+                        <div>
+                            <button><a href="/profile/edit">Edit Profile</a></button>
+                            <button style="border-radius: 50%" title="Add image" @click="openAddImageModal()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="profile__information__body">
                         <ul>
-                            <li><span class="bold">16</span> posts</li>
+                            <li><span class="bold">{{profile.posts.length}}</span> posts</li>
                             <li><span class="bold">330</span> followers</li>
                             <li><span class="bold">325</span> following</li>
                         </ul>
@@ -27,46 +34,60 @@
 
             <div class="profile__middle"></div>
             <div class="profile__pictures">
-                <div @click="openPost(1)" class="profile__pictures__container">
-                    <img src="/storage/images/aleksa.jpg" alt="">
+                <div  v-for="(post, index) in profile.posts" :key="index" class="profile__pictures__container">
+                    <img @click="openPost(post)" :src="'/storage/' + post.path" alt="">
                 </div>
-                <div class="profile__pictures__container">
-                    <img src="/storage/images/aleksa.jpg" alt="">
-                </div>
-                <div class="profile__pictures__container">
-                    <img src="/storage/images/aleksa.jpg" alt="">
-                </div>
-                <div class="profile__pictures__container">
-                    <img src="/storage/images/aleksa.jpg" alt="">
-                </div>
+                <!--<div  class="profile__pictures__container">-->
+                    <!--<img src="/storage/images/aleksa.jpg" alt="">-->
+                <!--</div>-->
+                <!--<div class="profile__pictures__container">-->
+                    <!--<img src="/storage/images/aleksa.jpg" alt="">-->
+                <!--</div>-->
+                <!--<div class="profile__pictures__container">-->
+                    <!--<img src="/storage/images/aleksa.jpg" alt="">-->
+                <!--</div>-->
+                <!--<div class="profile__pictures__container">-->
+                    <!--<img src="/storage/images/aleksa.jpg" alt="">-->
+                <!--</div>-->
             </div>
 
         </div>
         <transition name="fade" mode="out-in">
-            <post-modal v-if="showModal" :post="this.selectedPost"  @closeConfirmation="showModal = false">
+            <post-modal v-if="showImageModal" :profile="this.profile" :post="this.selectedPost"  @closeConfirmation="showImageModal = false">
                 <!--@deleteItem="deleteCourse"-->
             </post-modal>
+        </transition>
+        <transition name="fade" mode="out-in">
+            <add-video-modal v-if="showAddImageModal" @closeConfirmation="showAddImageModal = false">
+                <!--@deleteItem="deleteCourse"-->
+            </add-video-modal>
         </transition>
     </div>
 </template>
 
 <script>
+    import AddVideoModal from "./AddVideoModal";
     export default {
         name: "Profile",
+        components: {AddVideoModal},
         props:{
             prof: null,
         },
         data(){
             return {
                 profile: this.prof,
-                showModal: false,
+                showImageModal: false,
+                showAddImageModal: false,
                 selectedPost: null,
             }
         },
         methods:{
             openPost(post){
                 this.selectedPost = post;
-                this.showModal = true;
+                this.showImageModal = true;
+            },
+            openAddImageModal(){
+                this.showAddImageModal = true;
             }
         }
     }

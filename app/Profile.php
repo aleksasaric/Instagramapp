@@ -23,4 +23,9 @@ class Profile extends Model
     {
         return $this->belongsToMany(Profile::class, 'friends', 'friend_id','profile_id');
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

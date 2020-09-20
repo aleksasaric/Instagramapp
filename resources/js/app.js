@@ -21,6 +21,7 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('profile', require('./components/Profile.vue').default);
+Vue.component('wall', require('./components/Wall.vue').default);
 Vue.component('profile-edit', require('./components/EditProfile.vue').default);
 Vue.component('post-modal', require('./components/PostModal.vue').default);
 Vue.component('success-alert', require('./components/SuccessAlert.vue').default);

@@ -44,6 +44,7 @@ class User extends Authenticatable
                 'name' => $user['name'],
                 'username' => $user['username'],
                 'email' => $user['email'],
+                'user_id' => $user['id'],
             ]);
         });
     }

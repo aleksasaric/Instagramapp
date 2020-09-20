@@ -1,90 +1,39 @@
 <template>
-    <transition name="fade">
-        <div class="confirmationModal">
-            <span class="confirmationModal-mask" @click="$emit('closeConfirmation')"></span>
+    <div>
+        <div v-for="post in posts" class="confirmationModal">
             <div style="width:820px; height:600px; display:flex" class="confirmationModal-wrapper">
                 <div class="left-panel">
                     <img :src="'/storage/' + post.path" alt="">
                 </div>
                 <div class="right-panel">
-                        <div class="panel-heading">
-                            <div class="panel-container">
-                                <img v-if="profile.image" :src="profile.image" alt="profile_image">
-                                <img v-else src="/images/no_img.png" alt="profile_image">
-                                <p v-html="profile.username"></p>
-                            </div>
+                    <div class="panel-heading">
+                        <div class="panel-container">
+                            <img v-if="post.profile.image" :src="post.profile.image" alt="profile_image">
+                            <img v-else src="/images/no_img.png" alt="profile_image">
+                            <p v-html="post.profile.username"></p>
                         </div>
-                        <div v-html="post.description" class="panel-body">
+                    </div>
+                    <div v-html="post.description" class="panel-body">
 
-                        </div>
-                        <div class="panel-footer">
+                    </div>
+                    <div class="panel-footer">
 
-                        </div>
+                    </div>
                 </div>
 
                 <!--<div class="confirmationModal-wrapper-text">-->
-                    <!--<i @click="$emit('closeConfirmation')" class="fa fa-times"></i>-->
+                <!--<i @click="$emit('closeConfirmation')" class="fa fa-times"></i>-->
                 <!--</div>-->
             </div>
         </div>
-    </transition>
+    </div>
 </template>
 
 <script>
     export default {
-        name: "PostModal.vue",
-        data(){
-            return {
-                files:'',
-                title:'',
-                description:''
-            }
-        },
+        name: "Wall",
         props:{
-            post:{},
-            profile:{}
-        },
-        methods:{
-            showFilePicker(){
-                this.$refs.file.click();
-            },
-            onChange(event){
-                this.files = event.target.files[0]
-            },
-            handleSubmit(){
-                let formData = new FormData();
-                formData.append('video_id',this.video.id);
-                formData.append('file_name', this.files);
-                formData.append('title', this.title);
-                formData.append('description', this.description);
-                axios.post('/api/v1/videos/storeResource', formData).then(response => {
-                    this.files = '';
-                    this.title = '';
-                    this.description = '';
-                    if (response.data.status_code === 201) {
-                        this.$swal({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            title: 'Success',
-                            text: 'Resource added',
-                            timer: 3000
-                        });
-                    }else{
-                        this.$swal({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            title: 'Error',
-                            text: 'Fail to add',
-                            timer: 3000
-                        });
-                    }
-
-                }).catch(err => {
-                    console.log('err');
-                });
-            }
+            posts:{}
         }
     }
 </script>
@@ -143,6 +92,7 @@
         cursor: pointer;
     }
     .confirmationModal{
+        margin-bottom: 50px;
         position: fixed;
         top: 0;
         left: 0;
