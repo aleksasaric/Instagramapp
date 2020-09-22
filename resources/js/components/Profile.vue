@@ -10,6 +10,7 @@
                 <div class="profile__information">
                     <div class="profile__information__header">
                         <p>{{profile.username}}</p>
+                        <follow-button v-if="profile.id !== authUser.id" :profile="authUser" :friend="profile"></follow-button>
                         <div>
                             <button><a href="/profile/edit">Edit Profile</a></button>
                             <button style="border-radius: 50%" title="Add image" @click="openAddImageModal()">
@@ -20,8 +21,8 @@
                     <div class="profile__information__body">
                         <ul>
                             <li><span class="bold">{{profile.posts.length}}</span> posts</li>
-                            <li><span class="bold">330</span> followers</li>
-                            <li><span class="bold">325</span> following</li>
+                            <li><span class="bold">{{profile.befriended_by_count}}</span> followers</li>
+                            <li><span class="bold">{{profile.friends_count}}</span> following</li>
                         </ul>
                     </div>
                     <div class="profile__information__footer">
@@ -72,6 +73,7 @@
         components: {AddVideoModal},
         props:{
             prof: null,
+            authUser: {}
         },
         data(){
             return {

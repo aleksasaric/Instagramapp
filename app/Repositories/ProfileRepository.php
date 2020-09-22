@@ -30,7 +30,7 @@ class ProfileRepository implements ProfileRepositoryInterface{
 
     public function getByUsername($username)
     {
-        return $this->profile->where('username', $username)->with('posts')->first();
+        return $this->profile->where('username', $username)->with('posts')->withCount('friends','befriendedBy')->first();
     }
 
     public function insertOrUpdate($data, $id = null)

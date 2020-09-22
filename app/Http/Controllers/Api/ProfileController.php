@@ -48,4 +48,33 @@ class ProfileController extends ApiController
         
     }
 
+    public function follows(Request $request)
+    {
+        $data = [
+            'profile_id' => $request->input('profile_id'),
+            'friend_id' => $request->input('friend_id')
+        ];
+
+        $profile = $this->profile->getById($data['profile_id']);
+
+        $alreadyFollows = $profile->friends()->where('friend_id', $data['friend_id'])->count() > 0 ? true : false;
+
+        return $this->respondCreated('Successful retreave', $alreadyFollows);
+
+    }
+
+    public function toggleFollows(Request $request)
+    {
+        $data = [
+            'profile_id' => $request->input('profile_id'),
+            'friend_id' => $request->input('friend_id')
+        ];
+
+        $profile = $this->profile->getById($data['profile_id']);
+
+        $profile->friends()->toggle($data['friend_id']);
+
+        return $this->respondCreated('Successfully following');
+    }
+
 }

@@ -64,11 +64,14 @@ class ProfileController extends Controller
 
         if (!$profile) abort(404);
 
-        if (Auth::user()->profile == $profile){
-            $profile['owner'] = 1;
-        }
+        $authProfile = Auth::user()->profile;
 
-        return view('profile.index', compact('profile'));
+
+
+//        $profile['owner'] = Auth::user()->profile->id == $profile->id ? true : false;
+
+
+        return view('profile.index', compact('profile', 'authProfile'));
     }
 
     /**
