@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Post;
+use App\Profile;
 use App\Traits\UploadTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,12 +54,30 @@ class PostController extends ApiController
         }
 
         return $this->respondWithError();
-
-
-
-
     }
 
+    public function storeAvatar(Request $request)
+    {
+        $image = $request->file('image');
+
+        $data = [
+            'image' => $image,
+            'profile_id' => Auth::user()->profile->id,
+            'name' => date('Y_m_d-H-i-s'). '_' . md5($image->getClientOriginalName()),
+            'folder' => '/uploads/avatar',
+        ];
+
+        $data['path'] =  $this->uploadOne($image, $data['folder'], 'public', $data['name']);
+
+        $profile = Profile::whereId($data['profile_id'])->first();
+        $profile->image = $data['path'];
+
+        if ($profile->save()){
+            return $this->respondCreated('Successful upload', $profile);
+        }
+
+        return $this->respondWithError();
+    }
 
     public function show(Post $post)
     {

@@ -9,7 +9,7 @@ trait UploadTrait
 {
     public function uploadOne(UploadedFile $uploadedFile, $folder = null, $disk = 'public', $filename = null)
     {
-        $name = !is_null($filename) ? $filename : date('Y_m_d-H-i-s'). '_' . md5($uploadedFile->getClientOriginalName();
+        $name = !is_null($filename) ? $filename : date('Y_m_d-H-i-s'). '_' . md5($uploadedFile->getClientOriginalName());
 
         $file = $uploadedFile->storeAs($folder, $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
 

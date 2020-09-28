@@ -7,11 +7,16 @@
                 </div>
                 <div class="right-panel">
                     <div class="panel-heading">
+                        <a :href="'/profile/' + post.profile.username">
                         <div class="panel-container">
-                            <img v-if="post.profile.image" :src="post.profile.image" alt="profile_image">
-                            <img v-else src="/images/no_img.png" alt="profile_image">
-                            <p v-html="post.profile.username"></p>
+                                <img v-if="post.profile.image" :src="'/storage/' + post.profile.image" alt="profile_image">
+                                <img v-else src="/images/no_img.png" alt="profile_image">
+                                <p v-html="post.profile.username"></p>
                         </div>
+                        </a>
+                        <span v-html="post.created_at">
+
+                        </span>
                     </div>
                     <div v-html="post.description" class="panel-body">
 
@@ -53,10 +58,14 @@
     .right-panel{
         width:45%;
         padding: 20px;
+        padding-top: 0;
     }
     .panel-heading{
         height: 10%;
         display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
         width: 100%;
         border-bottom: 1px solid #eee;
         /*padding:20px;*/
@@ -93,12 +102,6 @@
     }
     .confirmationModal{
         margin-bottom: 50px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        transition: opacity .3s ease;
         z-index: 20;
         display: flex;
         align-items: center;

@@ -19,8 +19,8 @@ Route::get('/', function () {
 
 Route::get('/profile/edit', 'ProfileController@edit')->middleware('auth');
 Route::get('/profile/{username}', 'ProfileController@show')->middleware('auth');
-
 Route::post('/post', 'Api\PostController@store');
+Route::post('/post/avatar', 'Api\PostController@storeAvatar');
 
 
 Auth::routes();

@@ -14,6 +14,7 @@
 
     {{--FontAwsome--}}
     <script src="https://kit.fontawesome.com/fe66f60f69.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

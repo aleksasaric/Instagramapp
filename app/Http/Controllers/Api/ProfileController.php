@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Contracts\ProfileRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends ApiController
 {
@@ -32,11 +34,23 @@ class ProfileController extends ApiController
             'user_id'      => $request->input('user_id'),
             'website'      => $request->input('website'),
             'username'     => $request->input('username'),
+            'is_private'   => $request->input('privateAccount'),
             'password'     => $request->input('password'),
-            'is_private'   => $request->input('is_private'),
             'old_password' => $request->input('oldPassword'),
+            'confirm_password' => $request->input('confirmPassword'),
         ];
-        
+
+        $profile = $this->profile->getById($data['id']);
+        $authUser = $profile->user;
+
+
+        if ($data['password']) {
+            if (!$this->checkForPassword($data, $authUser)) return $this->respondWithError('Wrong password');
+            if ($data['password'] !== $data['confirm_password']) return $this->respondWithError('Password are not matching');
+
+            $authUser->password = bcrypt($data['password']);
+            $authUser->save();
+        }
 
         $profile = $this->profile->insertOrUpdate($data, $data['id']);
 
@@ -46,6 +60,14 @@ class ProfileController extends ApiController
 
         return $this->respondCreated($profile);
         
+    }
+
+    private function checkForPassword($data, $authUser){
+
+            if (!Hash::check($data['old_password'], $authUser->password)){
+                return false;
+            }
+            return true;
     }
 
     public function follows(Request $request)

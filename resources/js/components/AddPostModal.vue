@@ -1,44 +1,33 @@
 <template>
     <div class="modal">
-        <span class="mask" @click="$emit('close')"></span>
+        <span class="mask" @click="$emit('closeConfirmation')"></span>
         <div class="modal-wrapper">
             <div class="modal-container">
                 <div class="modal-body">
-                    <h1>Add Image</h1>
-                    <!--<div class="input-block">-->
-                        <!--<span class="input-info">Title <span data-v-465695ac="" class="red">*</span></span>-->
-                        <!--<div class="relative">-->
-                            <!--<input v-model="video.title" placeholder="Enter text..." type="text"/>-->
-                        <!--</div>-->
-                    <!--</div>-->
+                    <h1>Upload Image</h1>
                     <div class="input-block">
-                        <span class="input-info">Description</span>
+                        <!--<span class="input-info">Description</span>-->
                         <div class="relative">
-                            <textarea v-model="description" placeholder="Enter text..." type="text"/>
+                            <textarea v-model="description" placeholder="Enter Description..." type="text"/>
                         </div>
                     </div>
-                    <!--<div class="input-block">-->
-                        <!--<span class="input-info">Duration</span>-->
-                        <!--<div class="relative">-->
-                            <!--<input v-model="video.duration" placeholder="Ex: 1:45" type="text"/>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <div v-if="!showVideo" class="video-upload input-block">
-                        <img class="video-upload-image" src="/images/upload.png"/>
-                        <span class="video-upload-title">Upload Video</span>
-                        <span class="video-upload-description">Drag a file to attack or
-                            <span class="video-upload-input">
-                                <span>browse</span>
-                                <input ref="video" type="file" accept="image/x-png,image/gif,image/jpeg"/>
-                            </span>
-                        </span>
+                    <form id="form1" runat="server">
+                        <div class="video-upload input-block" >
+                            <img v-if="imgAttached" id="blah" src="#" alt="your image">
+                            <div v-if="!imgAttached" class="upload-img-div">
+                                <img class="video-upload-image" src="/images/upload.png"/>
+                                <span class="video-upload-title">Upload Image</span>
+                                <span class="video-upload-input">
+                                    <span>browse</span>
+                                    <input ref="image" @change="readURL()" id="imgInp" type="file" accept="image/x-png,image/gif,image/jpeg"/>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <div v-if="imgAttached" style="display: flex; justify-content: space-between">
+                        <button @click="addVideo"  class="button">Save</button>
+                        <button  @click="removeImage"  class="button">Remove Image</button>
                     </div>
-                    <div v-if="showVideo">
-                        <video ref="video" controls>
-                            <source ref="videoSource" :src="videoSource" />
-                        </video>
-                    </div>
-                    <span @click="addVideo"  class="button">Save</span>
                 </div>
             </div>
         </div>
@@ -49,7 +38,6 @@
 </template>
 
 <script>
-    // import Loader from '../../loaders/Loader'
     export default {
         name: "AddVideoModal",
         props: {
@@ -58,11 +46,13 @@
         },
         data(){
             return{
+                image: null,
                 description: '',
                 showVideo: false,
                 videoSource: null,
                 file: null,
                 showLoader: false,
+                imgAttached: false,
             }
         },
         mounted(){
@@ -70,24 +60,18 @@
         },
         methods:{
             addVideo(){
-                let $this = this;
-                let postFile = this.$refs.video.files[0];
-                let data = new FormData();
+                console.log(this.$refs);
+                let img = this.image;
                 let headers = {'Content-Type': 'multipart/form-data'};
                 this.showLoader = true;
-                data.append('image', postFile);
+                let data = new FormData();
+                data.append('image', img);
                 data.append('description', this.description);
                 axios.post('/post', data, headers)
                     .then(response => {
                         if(response.data.status_code === 201) {
-                            $this.$nextTick(() => {
-                                $this.videoSource = response.data.data;
-                                // $this.$refs.videoSource.parentElement.load();
-                                $this.file = postFile;
-                                $this.$forceUpdate();
-                            });
-                            $this.showLoader = false;
-                            $this.showVideo = true;
+                            this.$emit('imageUploaded', response.data.data);
+                            this.$emit('closeConfirmation');
                         }
                         if(response.data.status_code === 422) {
                             $this.$swal({
@@ -101,57 +85,57 @@
                             $this.showLoader = false;
                             $this.showVideo = false;
                         }
-                        console.log(response)
                     })
-                    .catch(error => console.error(error.response));
-            }
-            ,
-            handleUpload () {
-                let $this = this;
-                let postFile = this.$refs.video.files[0];
-                let data = new FormData();
-                let headers = {'Content-Type': 'multipart/form-data'};
-                this.showLoader = true;
-                data.append('image', postFile);
-                data.append('description', this.description);
-                axios.post('/api/v1/post', data, headers)
-                    .then(response => {
-                        if(response.data.status_code === 201) {
-                            $this.$nextTick(() => {
-                                $this.videoSource = response.data.data;
-                                // $this.$refs.videoSource.parentElement.load();
-                                $this.file = postFile;
-                                $this.$forceUpdate();
-                            });
-                            $this.showLoader = false;
-                            $this.showVideo = true;
-                        }
-                        if(response.data.status_code === 422) {
-                            $this.$swal({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                title: 'Error!',
-                                text: response.data.message,
-                                timer: 3000
-                            });
-                            $this.showLoader = false;
-                            $this.showVideo = false;
-                        }
-                        console.log(response)
-                    })
-                    .catch(error => console.error(error.response));
-            }
+            },
+            removeImage(){
+                $('#blah').attr('src', '');
+                this.imgAttached = false;
+            },
+             readURL() {
+                 let input = this.$refs.image;
+                 this.image = this.$refs.image.files[0];
+                 if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#blah').attr('src', e.target.result);
+                    };
+                    this.imgAttached = true;
+                    reader.readAsDataURL(input.files[0]);
+                 }
+             },
+
         }
     }
 </script>
 
 <style lang="scss" scoped>
+    .video-upload-title{
+        color: white !important;
+    }
+    .modal-body h1{
+        color: white;
+    }
+    .upload-img-div{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    #blah{
+        position: absolute;
+        top: 0px;
+        left: 0;
+        z-index:100;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
     video{
         width: 100%;
         margin: 20px 0;
     }
     .video-upload{
+        height: 500px;
         border: 2px dashed #dbe0e6;
         text-align: center;
         position: relative;

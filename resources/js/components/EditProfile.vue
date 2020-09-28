@@ -54,8 +54,8 @@
                 <div class="tab-2-active" v-if="activeTab===2">
                     <div class="privacy">
                         <h2>Account Privacy</h2>
-                        <input id="checkbox-1" type="checkbox">
-                        <label v-model="editProfile.privateAccount" for="checkbox-1">Private Account</label>
+                        <input v-model="editProfile.privateAccount" id="checkbox-1" type="checkbox">
+                        <label for="checkbox-1">Private Account</label>
                         <p>When your account is private, only people you approve can see your photos and videos on Instagram. Your existing followers won't be affected.
                         </p>
                     </div>
@@ -127,7 +127,7 @@
                 this.activeTab = tabNumber;
             },
             passwordMatch(){
-                if (this.editProfile.password === this.editProfile.password) {
+                if (this.editProfile.password !== this.editProfile.confirmPassword) {
                     this.showError = true;
                     this.errorMessage = 'Password do not match';
                     return false;

@@ -9,8 +9,8 @@
                 <div class="right-panel">
                         <div class="panel-heading">
                             <div class="panel-container">
-                                <img v-if="profile.image" :src="profile.image" alt="profile_image">
-                                <img v-else src="/images/no_img.png" alt="profile_image">
+                                <img v-if="profile.image" :src="'/storage/' + profile.image" alt="profile_image">
+                                <img v-else src="/storage/no_img.png" alt="profile_image">
                                 <p v-html="profile.username"></p>
                             </div>
                         </div>
@@ -97,7 +97,7 @@
         img{
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
     }
 

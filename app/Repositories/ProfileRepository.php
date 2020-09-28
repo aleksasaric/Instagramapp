@@ -63,11 +63,8 @@ class ProfileRepository implements ProfileRepositoryInterface{
         if (isset($data['gender'])){
             $object->gender = $data['gender'];
         }
-        if (isset($data['password'])){
-            $object->password = $data['password'];
-        }
-        if (isset($data['isPrivate'])){
-            $object->is_private = $data['isPrivate'];
+        if (isset($data['is_private'])){
+            $object->is_private = $data['is_private'];
         }
         if (isset($data['user_id'])){
             $object->user_id = $data['user_id'];

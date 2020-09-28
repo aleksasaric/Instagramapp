@@ -2,10 +2,16 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
+
+
+    protected $casts =
+        ['is_private' => 'boolean'];
+
 
     protected $guarded = [ ];
 
