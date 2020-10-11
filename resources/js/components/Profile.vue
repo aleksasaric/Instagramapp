@@ -12,7 +12,7 @@
                 <div class="profile__information">
                     <div class="profile__information__header">
                         <p>{{profile.username}}</p>
-                        <follow-button v-if="!isOwner" :profile="authUser" :friend="profile"></follow-button>
+                        <follow-button v-if="!isOwner" @followAdder="addOrRemoveFollower" :profile="authUser" :friend="profile"></follow-button>
                         <div v-if="profile.id === authUser.id">
                             <button><a href="/profile/edit">Edit Profile</a></button>
                             <button style="border-radius: 50%" title="Add image" @click="openAddImageModal()">
@@ -78,6 +78,9 @@
             }
         },
         methods:{
+            addOrRemoveFollower($var) {
+                this.$set(this.profile, 'befriended_by_count', $var > 0 ? this.profile.befriended_by_count + 1 : this.profile.befriended_by_count - 1);
+            },
             clickInput(){
                 if (!this.isOwner) return;
                 $('#imgInp').click();

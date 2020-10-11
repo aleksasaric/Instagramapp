@@ -14,6 +14,7 @@
         data(){
             return {
                 followProfile: false,
+                followAdder: 0
             }
         },
         created(){
@@ -36,6 +37,8 @@
                 axios.post('/api/v1/toggleFollow', formData).then(resp=>{
                     if (resp.data.status_code === 201){
                         this.followProfile = !this.followProfile;
+                        // this.followAdder = this.followProfile ? 1 : -1;
+                        this.$emit('followAdder', this.followProfile ? 1 : -1);
                     }
                 });
             }

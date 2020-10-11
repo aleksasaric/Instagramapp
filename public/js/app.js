@@ -2300,7 +2300,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      followProfile: false
+      followProfile: false,
+      followAdder: 0
     };
   },
   created: function created() {
@@ -2325,7 +2326,9 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('friend_id', this.friend.id);
       axios.post('/api/v1/toggleFollow', formData).then(function (resp) {
         if (resp.data.status_code === 201) {
-          _this2.followProfile = !_this2.followProfile;
+          _this2.followProfile = !_this2.followProfile; // this.followAdder = this.followProfile ? 1 : -1;
+
+          _this2.$emit('followAdder', _this2.followProfile ? 1 : -1);
         }
       });
     }
@@ -2532,6 +2535,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    addOrRemoveFollower: function addOrRemoveFollower($var) {
+      this.$set(this.profile, 'befriended_by_count', $var > 0 ? this.profile.befriended_by_count + 1 : this.profile.befriended_by_count - 1);
+    },
     clickInput: function clickInput() {
       if (!this.isOwner) return;
       $('#imgInp').click();
@@ -40249,7 +40255,8 @@ var render = function() {
                 _vm._v(" "),
                 !_vm.isOwner
                   ? _c("follow-button", {
-                      attrs: { profile: _vm.authUser, friend: _vm.profile }
+                      attrs: { profile: _vm.authUser, friend: _vm.profile },
+                      on: { followAdder: _vm.addOrRemoveFollower }
                     })
                   : _vm._e(),
                 _vm._v(" "),

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Contracts\ProfileRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Mail\NewFriend;
 use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class ProfileController extends ApiController
 {
@@ -93,9 +95,14 @@ class ProfileController extends ApiController
         ];
 
         $profile = $this->profile->getById($data['profile_id']);
-
         $profile->friends()->toggle($data['friend_id']);
+        $friend = $this->profile->getById($data['friend_id']);
 
+
+
+        Mail::to($friend->email)->send(new NewFriend($profile, $friend));
+
+//        new Mail(NewFriend::class);
         return $this->respondCreated('Successfully following');
     }
 

@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/profile/edit', 'ProfileController@edit')->middleware('auth');
-Route::get('/profile/{username}', 'ProfileController@show')->middleware('auth');
-Route::post('/post', 'Api\PostController@store');
-Route::post('/post/avatar', 'Api\PostController@storeAvatar');
-
+Route::middleware('auth')->group(function(){
+    Route::get('/profile/edit', 'ProfileController@edit');
+    Route::get('/profile/{username}', 'ProfileController@show');
+    Route::post('/post', 'Api\PostController@store');
+    Route::post('/post/avatar', 'Api\PostController@storeAvatar');
+});
+    Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
