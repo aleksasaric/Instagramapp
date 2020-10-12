@@ -27,7 +27,6 @@ class CreateProfilesTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

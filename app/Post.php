@@ -19,7 +19,6 @@ class Post extends Model
 
     private function fillObject($data){
         $post = new $this;
-
         if (isset($data['path'])){
             $post['path'] = $data['path'];
         }

@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
-
-
     protected $casts =
         ['is_private' => 'boolean'];
 
@@ -20,6 +18,11 @@ class Profile extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
     public function friends()
     {
         return $this->belongsToMany(Profile::class, 'friends', 'profile_id','friend_id');
@@ -28,10 +31,5 @@ class Profile extends Model
     public function befriendedBy()
     {
         return $this->belongsToMany(Profile::class, 'friends', 'friend_id','profile_id');
-    }
-
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
     }
 }
