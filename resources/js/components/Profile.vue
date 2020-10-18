@@ -48,17 +48,17 @@
             </post-modal>
         </transition>
         <transition name="fade" mode="out-in">
-            <add-video-modal v-if="showAddImageModal" @imageUploaded="handleUpload" @closeConfirmation="showAddImageModal = false">
-            </add-video-modal>
+            <add-post-modal :profile="profile" v-if="showAddImageModal" @imageUploaded="handleUpload" @closeConfirmation="showAddImageModal = false">
+            </add-post-modal>
         </transition>
     </div>
 </template>
 
 <script>
-    import AddVideoModal from "./AddPostModal";
+    import AddPostModal from "./AddPostModal";
     export default {
         name: "Profile",
-        components: {AddVideoModal},
+        components: {AddPostModal},
         props:{
             prof: null,
             authUser: {}
@@ -92,7 +92,8 @@
                 this.showLoader = true;
                 let data = new FormData();
                 data.append('image', img);
-                axios.post('/post/avatar', data, headers)
+                data.append('profile_id', this.profile.id);
+                axios.post('/api/v1/post/avatar', data, headers)
                     .then(response => {
                         if(response.data.status_code === 201) {
                             this.$set(this.profile, 'image', response.data.data.image)

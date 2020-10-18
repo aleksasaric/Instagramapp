@@ -61,7 +61,6 @@ class ProfileController extends Controller
     public function show($username)
     {
         $profile = $this->profile->getByUsername($username);
-        return $profile;
         if (!$profile) abort(404);
             $authProfile = Auth::user()->profile;
         return view('profile.index', compact('profile', 'authProfile'));

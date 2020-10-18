@@ -1950,8 +1950,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "AddVideoModal",
   props: {
-    get_chapter: {},
-    get_video: {}
+    profile: {}
   },
   data: function data() {
     return {
@@ -1978,7 +1977,8 @@ __webpack_require__.r(__webpack_exports__);
       var data = new FormData();
       data.append('image', img);
       data.append('description', this.description);
-      axios.post('/post', data, headers).then(function (response) {
+      data.append('profile_id', this.profile.id);
+      axios.post('/api/v1/post', data, headers).then(function (response) {
         if (response.data.status_code === 201) {
           _this.$emit('imageUploaded', response.data.data);
 
@@ -2514,7 +2514,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Profile",
   components: {
-    AddVideoModal: _AddPostModal__WEBPACK_IMPORTED_MODULE_0__["default"]
+    AddPostModal: _AddPostModal__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
     prof: null,
@@ -2552,7 +2552,8 @@ __webpack_require__.r(__webpack_exports__);
       this.showLoader = true;
       var data = new FormData();
       data.append('image', img);
-      axios.post('/post/avatar', data, headers).then(function (response) {
+      data.append('profile_id', this.profile.id);
+      axios.post('/api/v1/post/avatar', data, headers).then(function (response) {
         if (response.data.status_code === 201) {
           _this.$set(_this.profile, 'image', response.data.data.image);
         }
@@ -40368,7 +40369,8 @@ var render = function() {
         { attrs: { name: "fade", mode: "out-in" } },
         [
           _vm.showAddImageModal
-            ? _c("add-video-modal", {
+            ? _c("add-post-modal", {
+                attrs: { profile: _vm.profile },
                 on: {
                   imageUploaded: _vm.handleUpload,
                   closeConfirmation: function($event) {

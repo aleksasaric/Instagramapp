@@ -19,8 +19,6 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function(){
     Route::get('/profile/edit', 'ProfileController@edit');
     Route::get('/profile/{username}', 'ProfileController@show');
-    Route::post('/post', 'Api\PostController@store');
-    Route::post('/post/avatar', 'Api\PostController@storeAvatar');
 });
     Route::get('/home', 'HomeController@index')->name('home');
 

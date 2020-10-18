@@ -38,10 +38,11 @@ class PostController extends ApiController
     public function store(Request $request)
     {
         $image = $request->file('image');
+        $profile_id = $request->input('profile_id');
 
         $data = [
             'image' => $image,
-            'profile_id' => Auth::user()->profile->id,
+            'profile_id' => $profile_id,
             'name' => date('Y_m_d-H-i-s'). '_' . md5($image->getClientOriginalName()),
             'description' => $request->input('description'),
             'folder' => '/uploads/images',
@@ -59,10 +60,11 @@ class PostController extends ApiController
     public function storeAvatar(Request $request)
     {
         $image = $request->file('image');
+        $profile_id = $request->input('profile_id');
 
         $data = [
             'image' => $image,
-            'profile_id' => Auth::user()->profile->id,
+            'profile_id' => $profile_id,
             'name' => date('Y_m_d-H-i-s'). '_' . md5($image->getClientOriginalName()),
             'folder' => '/uploads/avatar',
         ];

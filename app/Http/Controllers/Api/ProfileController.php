@@ -99,8 +99,7 @@ class ProfileController extends ApiController
         $friend = $this->profile->getById($data['friend_id']);
 
 
-
-        Mail::to($friend->email)->send(new NewFriend($profile, $friend));
+        Mail::to($friend)->send(new NewFriend($profile, $friend));
 
 //        new Mail(NewFriend::class);
         return $this->respondCreated('Successfully following');

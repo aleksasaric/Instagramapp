@@ -41,8 +41,7 @@
     export default {
         name: "AddVideoModal",
         props: {
-            get_chapter: {},
-            get_video: {}
+            profile: {},
         },
         data(){
             return{
@@ -67,7 +66,8 @@
                 let data = new FormData();
                 data.append('image', img);
                 data.append('description', this.description);
-                axios.post('/post', data, headers)
+                data.append('profile_id', this.profile.id);
+                axios.post('/api/v1/post', data, headers)
                     .then(response => {
                         if(response.data.status_code === 201) {
                             this.$emit('imageUploaded', response.data.data);
