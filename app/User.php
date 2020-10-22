@@ -10,30 +10,34 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','username',
     ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            Profile::create([
+                'name' => $user['name'],
+                'username' => $user['username'],
+                'email' => $user['email'],
+                'user_id' => $user['id'],
+                'image' => 'no_img.png',
+            ]);
+        });
+    }
+
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+
 }

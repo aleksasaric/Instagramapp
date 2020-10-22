@@ -16,3 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::middleware('auth')->group(function(){
+    Route::get('/profile/edit', 'ProfileController@edit');
+    Route::get('/profile/{username}', 'ProfileController@show');
+});
+    Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
