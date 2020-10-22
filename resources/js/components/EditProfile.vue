@@ -169,19 +169,20 @@
     .edit-wrapper{
         height: 80vh;
         width: 100%;
-        background: whitesmoke;
+        /*background: whitesmoke;*/
         display: flex;
         justify-content:center;
     }
     .edit-menu{
         width: 20%;
-        background: #b0d4f1;
+        border: 1px solid rgb(219, 219, 219);
+        /*background: #b0d4f1;*/
     }
     .edit-menu__item{
         width: 100%;
         padding: 10px 20px 10px 20px;
         cursor: pointer;
-        border-left: #b0d4f1 solid 2px;
+        border-left: rgba(38,38,38,0.1) solid 2px;
     }
     .edit-menu__item:hover{
         background: rgba(38,38,38,0.1);
@@ -189,7 +190,8 @@
         /*border-left: gray solid 2px;*/
     }
     .edit-inputs{
-        background: lightblue;
+        /*background: lightblue;*/
+        border: 1px solid rgb(219, 219, 219);
         width: 40%;
         display: flex;
         justify-content: center;
@@ -218,7 +220,7 @@
        padding-right: 20px;
     }
     .row-input input{
-
+        padding: 0 10px;
     }
     .change-picture{
         padding-right:20px

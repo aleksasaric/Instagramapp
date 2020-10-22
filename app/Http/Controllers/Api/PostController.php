@@ -11,29 +11,14 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends ApiController
 {
-
     use UploadTrait;
-    /**
-     * @var Post
-     */
+
     private $post;
 
     public function __construct(Post $post)
     {
         $this->post = $post;
     }
-
-    public function index()
-    {
-        //
-    }
-
-
-    public function create()
-    {
-        //
-    }
-
 
     public function store(Request $request)
     {
@@ -81,28 +66,4 @@ class PostController extends ApiController
         return $this->respondWithError();
     }
 
-    public function show(Post $post)
-    {
-
-    }
-
-
-    public function edit(Post $post)
-    {
-        //
-    }
-
-
-    public function update(Request $request, Post $post)
-    {
-        //
-    }
-
-    /**
-     * @param Post $post
-     */
-    public function destroy(Post $post)
-    {
-        //
-    }
 }

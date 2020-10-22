@@ -2670,6 +2670,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Wall",
   props: {
@@ -7317,7 +7320,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".left-panel[data-v-9225d896] {\n  width: 55%;\n}\n.left-panel img[data-v-9225d896] {\n  width: 100%;\n  height: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.right-panel[data-v-9225d896] {\n  width: 45%;\n  padding: 20px;\n  padding-top: 0;\n}\n.panel-heading[data-v-9225d896] {\n  height: 10%;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-wrap: wrap;\n  width: 100%;\n  border-bottom: 1px solid #eee;\n  /*padding:20px;*/\n}\n.panel-heading .panel-container[data-v-9225d896] {\n  display: flex;\n  align-items: center;\n}\n.panel-heading .panel-container img[data-v-9225d896] {\n  width: 40px;\n  height: 40px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-radius: 50%;\n}\n.panel-heading .panel-container p[data-v-9225d896] {\n  padding-left: 10px;\n}\n.panel-body[data-v-9225d896] {\n  height: 60%;\n}\n.panel-footer[data-v-9225d896] {\n  height: 30%;\n}\n.submit-btn-add[data-v-9225d896] {\n  background-color: #354053;\n  color: white;\n  padding: 13px 20px;\n  border-radius: 2px;\n  outline: none;\n  border: 0;\n  text-transform: uppercase;\n  cursor: pointer;\n}\n.confirmationModal[data-v-9225d896] {\n  margin-bottom: 50px;\n  z-index: 20;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n}\n.confirmationModal-wrapper[data-v-9225d896] {\n  position: relative;\n  z-index: 1;\n  background: white;\n  width: 350px;\n}\n.confirmationModal-wrapper-text[data-v-9225d896] {\n  padding: 20px;\n  color: #354053;\n}\n.confirmationModal-wrapper-text i[data-v-9225d896] {\n  cursor: pointer;\n  position: absolute;\n  right: 20px;\n  top: 20px;\n}\n.confirmationModal-wrapper-text h2[data-v-9225d896] {\n  margin-top: 40px;\n  font-size: 14px;\n  text-align: center;\n  font-weight: normal;\n}\n.confirmationModal-wrapper-text span[data-v-9225d896] {\n  display: block;\n  text-align: center;\n  font-size: 12px;\n  font-weight: bold;\n  margin-bottom: 5px;\n}\n.confirmationModal-wrapper-bottom[data-v-9225d896] {\n  padding: 0 40px 40px;\n  margin-top: 30px;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.confirmationModal-wrapper-bottom span[data-v-9225d896] {\n  width: 50%;\n  text-align: center;\n  padding: 15px;\n  font-size: 14px;\n  transition: 0.3s all ease-in-out;\n  text-transform: uppercase;\n  color: #a9bac6;\n  cursor: pointer;\n}\n.confirmationModal-wrapper-bottom span[data-v-9225d896]:hover {\n  color: #354053;\n}\n.confirmationModal-wrapper-bottom span[data-v-9225d896]:first-child {\n  margin-right: 20px;\n  background-color: #f9f9f9;\n  color: #354053;\n}\n.confirmationModal-wrapper-bottom span[data-v-9225d896]:last-child {\n  margin-left: 20px;\n  background-color: #354053;\n  color: white;\n}\n.confirmationModal-mask[data-v-9225d896] {\n  background: rgba(0, 0, 0, 0.7);\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n}\n.confirmationModal-enter[data-v-9225d896], .confirmationModal-leave[data-v-9225d896] {\n  opacity: 0;\n}\n.confirmationModal-enter .confirmationModal-container[data-v-9225d896], .confirmationModal-leave .confirmationModal-container[data-v-9225d896] {\n  transform: scale(1.1);\n}", ""]);
+exports.push([module.i, ".no-posts[data-v-9225d896] {\n  text-align: center;\n  font-size: 20px;\n}\n.left-panel[data-v-9225d896] {\n  width: 55%;\n}\n.left-panel img[data-v-9225d896] {\n  width: 100%;\n  height: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.right-panel[data-v-9225d896] {\n  width: 45%;\n  padding: 20px;\n  padding-top: 0;\n}\n.panel-heading[data-v-9225d896] {\n  height: 10%;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-wrap: wrap;\n  width: 100%;\n  border-bottom: 1px solid #eee;\n  /*padding:20px;*/\n}\n.panel-heading .panel-container[data-v-9225d896] {\n  display: flex;\n  align-items: center;\n}\n.panel-heading .panel-container img[data-v-9225d896] {\n  width: 40px;\n  height: 40px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-radius: 50%;\n}\n.panel-heading .panel-container p[data-v-9225d896] {\n  padding-left: 10px;\n}\n.panel-body[data-v-9225d896] {\n  height: 60%;\n}\n.panel-footer[data-v-9225d896] {\n  height: 30%;\n}\n.submit-btn-add[data-v-9225d896] {\n  background-color: #354053;\n  color: white;\n  padding: 13px 20px;\n  border-radius: 2px;\n  outline: none;\n  border: 0;\n  text-transform: uppercase;\n  cursor: pointer;\n}\n.confirmationModal[data-v-9225d896] {\n  margin-bottom: 50px;\n  z-index: 20;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n}\n.confirmationModal-wrapper[data-v-9225d896] {\n  position: relative;\n  z-index: 1;\n  background: white;\n  width: 350px;\n}\n.confirmationModal-wrapper-text[data-v-9225d896] {\n  padding: 20px;\n  color: #354053;\n}\n.confirmationModal-wrapper-text i[data-v-9225d896] {\n  cursor: pointer;\n  position: absolute;\n  right: 20px;\n  top: 20px;\n}\n.confirmationModal-wrapper-text h2[data-v-9225d896] {\n  margin-top: 40px;\n  font-size: 14px;\n  text-align: center;\n  font-weight: normal;\n}\n.confirmationModal-wrapper-text span[data-v-9225d896] {\n  display: block;\n  text-align: center;\n  font-size: 12px;\n  font-weight: bold;\n  margin-bottom: 5px;\n}\n.confirmationModal-wrapper-bottom[data-v-9225d896] {\n  padding: 0 40px 40px;\n  margin-top: 30px;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.confirmationModal-wrapper-bottom span[data-v-9225d896] {\n  width: 50%;\n  text-align: center;\n  padding: 15px;\n  font-size: 14px;\n  transition: 0.3s all ease-in-out;\n  text-transform: uppercase;\n  color: #a9bac6;\n  cursor: pointer;\n}\n.confirmationModal-wrapper-bottom span[data-v-9225d896]:hover {\n  color: #354053;\n}\n.confirmationModal-wrapper-bottom span[data-v-9225d896]:first-child {\n  margin-right: 20px;\n  background-color: #f9f9f9;\n  color: #354053;\n}\n.confirmationModal-wrapper-bottom span[data-v-9225d896]:last-child {\n  margin-left: 20px;\n  background-color: #354053;\n  color: white;\n}\n.confirmationModal-mask[data-v-9225d896] {\n  background: rgba(0, 0, 0, 0.7);\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n}\n.confirmationModal-enter[data-v-9225d896], .confirmationModal-leave[data-v-9225d896] {\n  opacity: 0;\n}\n.confirmationModal-enter .confirmationModal-container[data-v-9225d896], .confirmationModal-leave .confirmationModal-container[data-v-9225d896] {\n  transform: scale(1.1);\n}", ""]);
 
 // exports
 
@@ -7336,7 +7339,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.edit-wrapper[data-v-570c77a4]{\n    height: 80vh;\n    width: 100%;\n    background: whitesmoke;\n    display: flex;\n    justify-content:center;\n}\n.edit-menu[data-v-570c77a4]{\n    width: 20%;\n    background: #b0d4f1;\n}\n.edit-menu__item[data-v-570c77a4]{\n    width: 100%;\n    padding: 10px 20px 10px 20px;\n    cursor: pointer;\n    border-left: #b0d4f1 solid 2px;\n}\n.edit-menu__item[data-v-570c77a4]:hover{\n    background: rgba(38,38,38,0.1);\n    border-left: gray 2px solid;\n    /*border-left: gray solid 2px;*/\n}\n.edit-inputs[data-v-570c77a4]{\n    background: lightblue;\n    width: 40%;\n    display: flex;\n    justify-content: center;\n}\n.input-holder[data-v-570c77a4]{\n}\n.row-input-header[data-v-570c77a4]{\n    display: flex;\n    justify-content: flex-end;\n    margin: 10px 0 10px 0;\n}\n.row-input-header img[data-v-570c77a4]{\n    width: 40px;\n    height: 40px;\n    border-radius: 50%;\n}\n.row-input[data-v-570c77a4]{\n    width: 100%;\n    display: flex;\n    justify-content: flex-end;\n    margin: 10px 0 10px 0;\n}\n.row-input label[data-v-570c77a4]{\n   padding-right: 20px;\n}\n.row-input input[data-v-570c77a4]{\n}\n.change-picture[data-v-570c77a4]{\n    padding-right:20px\n}\n.change-picture-name[data-v-570c77a4]{\n    font-size: 1.2em;\n    font-weight: bold;\n}\n.change-picture-profile[data-v-570c77a4]{\n    color: #1d68a7;\n    cursor: pointer;\n}\n.active[data-v-570c77a4]{\n    border-left: black 2px solid;\n}\n.img-container[data-v-570c77a4]{\n    padding-right: 20px;\n}\n.tab-2-active[data-v-570c77a4]{\n    padding: 40px;\n}\n\n", ""]);
+exports.push([module.i, "\n.edit-wrapper[data-v-570c77a4]{\n    height: 80vh;\n    width: 100%;\n    /*background: whitesmoke;*/\n    display: flex;\n    justify-content:center;\n}\n.edit-menu[data-v-570c77a4]{\n    width: 20%;\n    border: 1px solid rgb(219, 219, 219);\n    /*background: #b0d4f1;*/\n}\n.edit-menu__item[data-v-570c77a4]{\n    width: 100%;\n    padding: 10px 20px 10px 20px;\n    cursor: pointer;\n    border-left: rgba(38,38,38,0.1) solid 2px;\n}\n.edit-menu__item[data-v-570c77a4]:hover{\n    background: rgba(38,38,38,0.1);\n    border-left: gray 2px solid;\n    /*border-left: gray solid 2px;*/\n}\n.edit-inputs[data-v-570c77a4]{\n    /*background: lightblue;*/\n    border: 1px solid rgb(219, 219, 219);\n    width: 40%;\n    display: flex;\n    justify-content: center;\n}\n.input-holder[data-v-570c77a4]{\n}\n.row-input-header[data-v-570c77a4]{\n    display: flex;\n    justify-content: flex-end;\n    margin: 10px 0 10px 0;\n}\n.row-input-header img[data-v-570c77a4]{\n    width: 40px;\n    height: 40px;\n    border-radius: 50%;\n}\n.row-input[data-v-570c77a4]{\n    width: 100%;\n    display: flex;\n    justify-content: flex-end;\n    margin: 10px 0 10px 0;\n}\n.row-input label[data-v-570c77a4]{\n   padding-right: 20px;\n}\n.row-input input[data-v-570c77a4]{\n    padding: 0 10px;\n}\n.change-picture[data-v-570c77a4]{\n    padding-right:20px\n}\n.change-picture-name[data-v-570c77a4]{\n    font-size: 1.2em;\n    font-weight: bold;\n}\n.change-picture-profile[data-v-570c77a4]{\n    color: #1d68a7;\n    cursor: pointer;\n}\n.active[data-v-570c77a4]{\n    border-left: black 2px solid;\n}\n.img-container[data-v-570c77a4]{\n    padding-right: 20px;\n}\n.tab-2-active[data-v-570c77a4]{\n    padding: 40px;\n}\n\n", ""]);
 
 // exports
 
@@ -40488,59 +40491,73 @@ var render = function() {
   return _c(
     "div",
     _vm._l(_vm.posts, function(post) {
-      return _c("div", { staticClass: "confirmationModal" }, [
-        _c(
-          "div",
-          {
-            staticClass: "confirmationModal-wrapper",
-            staticStyle: { width: "820px", height: "600px", display: "flex" }
-          },
-          [
-            _c("div", { staticClass: "left-panel" }, [
-              _c("img", { attrs: { src: "/storage/" + post.path, alt: "" } })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "right-panel" }, [
-              _c("div", { staticClass: "panel-heading" }, [
-                _c(
-                  "a",
-                  { attrs: { href: "/profile/" + post.profile.username } },
-                  [
-                    _c("div", { staticClass: "panel-container" }, [
-                      post.profile.image
-                        ? _c("img", {
-                            attrs: {
-                              src: "/storage/" + post.profile.image,
-                              alt: "profile_image"
+      return _vm.posts && _vm.posts.length > 0
+        ? _c("div", { staticClass: "confirmationModal" }, [
+            _c(
+              "div",
+              {
+                staticClass: "confirmationModal-wrapper",
+                staticStyle: {
+                  width: "820px",
+                  height: "600px",
+                  display: "flex"
+                }
+              },
+              [
+                _c("div", { staticClass: "left-panel" }, [
+                  _c("img", {
+                    attrs: { src: "/storage/" + post.path, alt: "" }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "right-panel" }, [
+                  _c("div", { staticClass: "panel-heading" }, [
+                    _c(
+                      "a",
+                      { attrs: { href: "/profile/" + post.profile.username } },
+                      [
+                        _c("div", { staticClass: "panel-container" }, [
+                          post.profile.image
+                            ? _c("img", {
+                                attrs: {
+                                  src: "/storage/" + post.profile.image,
+                                  alt: "profile_image"
+                                }
+                              })
+                            : _c("img", {
+                                attrs: {
+                                  src: "/images/no_img.png",
+                                  alt: "profile_image"
+                                }
+                              }),
+                          _vm._v(" "),
+                          _c("p", {
+                            domProps: {
+                              innerHTML: _vm._s(post.profile.username)
                             }
                           })
-                        : _c("img", {
-                            attrs: {
-                              src: "/images/no_img.png",
-                              alt: "profile_image"
-                            }
-                          }),
-                      _vm._v(" "),
-                      _c("p", {
-                        domProps: { innerHTML: _vm._s(post.profile.username) }
-                      })
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c("span", { domProps: { innerHTML: _vm._s(post.created_at) } })
-              ]),
-              _vm._v(" "),
-              _c("div", {
-                staticClass: "panel-body",
-                domProps: { innerHTML: _vm._s(post.description) }
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "panel-footer" })
-            ])
-          ]
-        )
-      ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("span", {
+                      domProps: { innerHTML: _vm._s(post.created_at) }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", {
+                    staticClass: "panel-body",
+                    domProps: { innerHTML: _vm._s(post.description) }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "panel-footer" })
+                ])
+              ]
+            )
+          ])
+        : _c("div", { staticClass: "no-posts" }, [
+            _vm._v("\n        No Posts!\n    ")
+          ])
     }),
     0
   )

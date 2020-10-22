@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="post in posts" class="confirmationModal">
+        <div v-if="posts && posts.length > 0" v-for="post in posts" class="confirmationModal">
             <div style="width:820px; height:600px; display:flex" class="confirmationModal-wrapper">
                 <div class="left-panel">
                     <img :src="'/storage/' + post.path" alt="">
@@ -31,6 +31,9 @@
                 <!--</div>-->
             </div>
         </div>
+        <div class="no-posts" v-else>
+            No Posts!
+        </div>
     </div>
 </template>
 
@@ -45,6 +48,10 @@
 
 <style lang="scss" scoped>
 
+    .no-posts{
+        text-align: center;
+        font-size: 20px;
+    }
     .left-panel{
         width: 55%;
 
