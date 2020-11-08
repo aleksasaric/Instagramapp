@@ -32,7 +32,7 @@
 
 <script>
     export default {
-        name: "PostModal.vue",
+        name: "PostModal",
         data(){
             return {
                 files:'',
@@ -51,40 +51,6 @@
             onChange(event){
                 this.files = event.target.files[0]
             },
-            handleSubmit(){
-                let formData = new FormData();
-                formData.append('video_id',this.video.id);
-                formData.append('file_name', this.files);
-                formData.append('title', this.title);
-                formData.append('description', this.description);
-                axios.post('/api/v1/videos/storeResource', formData).then(response => {
-                    this.files = '';
-                    this.title = '';
-                    this.description = '';
-                    if (response.data.status_code === 201) {
-                        this.$swal({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            title: 'Success',
-                            text: 'Resource added',
-                            timer: 3000
-                        });
-                    }else{
-                        this.$swal({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            title: 'Error',
-                            text: 'Fail to add',
-                            timer: 3000
-                        });
-                    }
-
-                }).catch(err => {
-                    console.log('err');
-                });
-            }
         }
     }
 </script>

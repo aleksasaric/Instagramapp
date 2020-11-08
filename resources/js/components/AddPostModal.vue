@@ -12,12 +12,12 @@
                         </div>
                     </div>
                     <form id="form1" runat="server">
-                        <div class="video-upload input-block" >
+                        <div class="post-upload input-block" >
                             <img v-if="imgAttached" id="blah" src="#" alt="your image">
                             <div v-if="!imgAttached" class="upload-img-div">
-                                <img class="video-upload-image" src="/images/upload.png"/>
-                                <span class="video-upload-title">Upload Image</span>
-                                <span class="video-upload-input">
+                                <img class="post-upload-image" src="/images/upload.png"/>
+                                <span class="post-upload-title">Upload Image</span>
+                                <span class="post-upload-input">
                                     <span>browse</span>
                                     <input ref="image" @change="readURL()" id="imgInp" type="file" accept="image/x-png,image/gif,image/jpeg"/>
                                 </span>
@@ -25,32 +25,37 @@
                         </div>
                     </form>
                     <div v-if="imgAttached" style="display: flex; justify-content: space-between">
-                        <button @click="addVideo"  class="button">Save</button>
-                        <button  @click="removeImage"  class="button">Remove</button>
+                        <span v-if="!pingingApi" @click="addPost"  class="api-button">Save</span>
+                        <div class="api-button" v-else>
+                            <span class="button-loader"></span>
+                        </div>
+                        <button @click="removeImage"  class="button">Remove</button>
                     </div>
                 </div>
             </div>
         </div>
-        <!--<transition name="fade" mode="out-in">-->
-            <img v-if="showLoader" src="/images/loader.gif" alt="loader">
-        <!--</transition>-->
+        <success-modal @close="isSuccess = false" v-if="isSuccess">
+            <span slot="success-title">{{title}}</span>
+            <span slot="success-info">{{message}}</span>
+        </success-modal>
     </div>
 </template>
 
 <script>
     export default {
-        name: "AddVideoModal",
+        name: "AddPostModal",
         props: {
             profile: {},
         },
         data(){
             return{
+                isSuccess: false,
+                title: '',
+                message: '',
                 image: null,
                 description: '',
-                showVideo: false,
-                videoSource: null,
                 file: null,
-                showLoader: false,
+                pingingApi: false,
                 imgAttached: false,
             }
         },
@@ -58,11 +63,18 @@
 
         },
         methods:{
-            addVideo(){
-                console.log(this.$refs);
+            openModal(title, message){
+                this.isSuccess = true;
+                this.title = title;
+                this.message = message;
+                setTimeout(() => {
+                    this.isSuccess = false;
+                }, 5000);
+            },
+            addPost(){
                 let img = this.image;
+                this.pingingApi = true;
                 let headers = {'Content-Type': 'multipart/form-data'};
-                this.showLoader = true;
                 let data = new FormData();
                 data.append('image', img);
                 data.append('description', this.description);
@@ -70,21 +82,11 @@
                 axios.post('/api/v1/post', data, headers)
                     .then(response => {
                         if(response.data.status_code === 201) {
-                            this.$emit('imageUploaded', response.data.data);
+                            this.$emit('imageUploaded', response.data);
                             this.$emit('closeConfirmation');
+
                         }
-                        if(response.data.status_code === 422) {
-                            $this.$swal({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                title: 'Error!',
-                                text: response.data.message,
-                                timer: 3000
-                            });
-                            $this.showLoader = false;
-                            $this.showVideo = false;
-                        }
+                        this.pingingApi = false;
                     })
             },
             removeImage(){
@@ -109,7 +111,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .video-upload-title{
+    .post-upload-title{
         color: white !important;
     }
     .modal-body h1{
@@ -130,11 +132,11 @@
         height: 400px;
         object-fit: contain;
     }
-    video{
+    post{
         width: 100%;
         margin: 20px 0;
     }
-    .video-upload{
+    .post-upload{
         height: 404px;
         width: 99%;
         border: 2px dashed #dbe0e6;
@@ -308,6 +310,7 @@
         }
     }
     .button{
+        border: none;
         font-weight: 600;
         background-color: #00A4FF;
         color: white;

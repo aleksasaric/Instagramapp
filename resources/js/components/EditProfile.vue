@@ -43,7 +43,10 @@
                         <input v-model="editProfile.gender" id="row6" type="text">
                     </div>
                     <div class="row-input">
-                       <span class="buttons" @click="updateProfile()">Submit</span>
+                       <span v-if="!pingingApi" class="api-button" @click="updateProfile()">Submit</span>
+                        <div class="api-button" v-else>
+                            <span class="button-loader"></span>
+                        </div>
                     </div>
                     <!--</div>-->
                 </div>
@@ -80,7 +83,10 @@
                         <input required v-model="editProfile.confirmPassword" id="password-conform" type="password">
                     </div>
                     <div class="row-input">
-                        <span class="buttons" @click="updateProfile()">Change Password</span>
+                        <span v-if="!pingingApi" class="api-button" @click="updateProfile()">Submit</span>
+                        <div class="api-button" v-else>
+                            <span class="button-loader"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -100,6 +106,7 @@
         },
         data(){
             return {
+                pingingApi: false,
                 file: null,
                 isSuccess: false,
                 title: '',
@@ -124,6 +131,7 @@
                 }, 5000);
             },
             handleUpload(e){
+                this.pingingApi = true;
                 let files = e.target.files || e.dataTransfer.files;
                 if (!files.length)
                     return;
@@ -139,6 +147,7 @@
                     else{
                         this.openModal('Error!', response.data.message);
                     }
+                    this.pingingApi = false;
                 });
             },
             activateTab(tabNumber){
@@ -155,17 +164,21 @@
                 if (!this.passwordMatch()){
                     return;
                 }
+                this.pingingApi = true;
                 axios.post('/api/v1/profile/update', this.editProfile)
                     .then(response => {
                         if(response.data.status_code === 201) {
                             this.openModal('Success!', response.data.message);
-                            this.profile = response.data.data;
                             if (this.profile.username !== response.data.data.username){
-                                location.reload();
+                                setTimeout(()=>{
+                                    location.reload();
+                                },5000)
                             }
+                            this.profile = response.data.data;
                         }else{
                             this.openModal('Error!', response.data.message);
                         }
+                        this.pingingApi = false;
                     });
             },
         },

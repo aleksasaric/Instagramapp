@@ -1947,56 +1947,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "AddVideoModal",
+  name: "AddPostModal",
   props: {
     profile: {}
   },
   data: function data() {
     return {
+      isSuccess: false,
+      title: '',
+      message: '',
       image: null,
       description: '',
-      showVideo: false,
-      videoSource: null,
       file: null,
-      showLoader: false,
+      pingingApi: false,
       imgAttached: false
     };
   },
   mounted: function mounted() {},
   methods: {
-    addVideo: function addVideo() {
+    openModal: function openModal(title, message) {
       var _this = this;
 
-      console.log(this.$refs);
+      this.isSuccess = true;
+      this.title = title;
+      this.message = message;
+      setTimeout(function () {
+        _this.isSuccess = false;
+      }, 5000);
+    },
+    addPost: function addPost() {
+      var _this2 = this;
+
       var img = this.image;
+      this.pingingApi = true;
       var headers = {
         'Content-Type': 'multipart/form-data'
       };
-      this.showLoader = true;
       var data = new FormData();
       data.append('image', img);
       data.append('description', this.description);
       data.append('profile_id', this.profile.id);
       axios.post('/api/v1/post', data, headers).then(function (response) {
         if (response.data.status_code === 201) {
-          _this.$emit('imageUploaded', response.data.data);
+          _this2.$emit('imageUploaded', response.data);
 
-          _this.$emit('closeConfirmation');
+          _this2.$emit('closeConfirmation');
         }
 
-        if (response.data.status_code === 422) {
-          $this.$swal({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            title: 'Error!',
-            text: response.data.message,
-            timer: 3000
-          });
-          $this.showLoader = false;
-          $this.showVideo = false;
-        }
+        _this2.pingingApi = false;
       });
     },
     removeImage: function removeImage() {
@@ -2126,6 +2129,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "EditProfile.vue",
   props: {
@@ -2133,6 +2142,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      pingingApi: false,
       file: null,
       isSuccess: false,
       title: '',
@@ -2161,6 +2171,7 @@ __webpack_require__.r(__webpack_exports__);
     handleUpload: function handleUpload(e) {
       var _this2 = this;
 
+      this.pingingApi = true;
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.file = files[0];
@@ -2175,6 +2186,8 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           _this2.openModal('Error!', response.data.message);
         }
+
+        _this2.pingingApi = false;
       });
     },
     activateTab: function activateTab(tabNumber) {
@@ -2195,18 +2208,23 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+      this.pingingApi = true;
       axios.post('/api/v1/profile/update', this.editProfile).then(function (response) {
         if (response.data.status_code === 201) {
           _this3.openModal('Success!', response.data.message);
 
-          _this3.profile = response.data.data;
-
           if (_this3.profile.username !== response.data.data.username) {
-            location.reload();
+            setTimeout(function () {
+              location.reload();
+            }, 5000);
           }
+
+          _this3.profile = response.data.data;
         } else {
           _this3.openModal('Error!', response.data.message);
         }
+
+        _this3.pingingApi = false;
       });
     }
   },
@@ -2277,6 +2295,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FollowButton",
   props: {
@@ -2285,6 +2307,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      pingingApi: false,
       isSuccess: false,
       title: '',
       message: '',
@@ -2295,6 +2318,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
+    this.pingingApi = true;
     axios.get('/api/v1/follows', {
       params: {
         profile_id: this.profile.id,
@@ -2302,7 +2326,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     }).then(function (response) {
       _this.followProfile = response.data.data;
-      console.log(response);
+      _this.pingingApi = false;
     });
   },
   methods: {
@@ -2319,6 +2343,7 @@ __webpack_require__.r(__webpack_exports__);
     toggleFollow: function toggleFollow() {
       var _this3 = this;
 
+      this.pingingApi = true;
       var formData = new FormData();
       formData.append('profile_id', this.profile.id);
       formData.append('friend_id', this.friend.id);
@@ -2332,6 +2357,8 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           _this3.openModal('Error!', resp.data.message);
         }
+
+        _this3.pingingApi = false;
       });
     }
   },
@@ -2386,7 +2413,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "PostModal.vue",
+  name: "PostModal",
   data: function data() {
     return {
       files: '',
@@ -2404,42 +2431,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     onChange: function onChange(event) {
       this.files = event.target.files[0];
-    },
-    handleSubmit: function handleSubmit() {
-      var _this = this;
-
-      var formData = new FormData();
-      formData.append('video_id', this.video.id);
-      formData.append('file_name', this.files);
-      formData.append('title', this.title);
-      formData.append('description', this.description);
-      axios.post('/api/v1/videos/storeResource', formData).then(function (response) {
-        _this.files = '';
-        _this.title = '';
-        _this.description = '';
-
-        if (response.data.status_code === 201) {
-          _this.$swal({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            title: 'Success',
-            text: 'Resource added',
-            timer: 3000
-          });
-        } else {
-          _this.$swal({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            title: 'Error',
-            text: 'Fail to add',
-            timer: 3000
-          });
-        }
-      })["catch"](function (err) {
-        console.log('err');
-      });
     }
   }
 });
@@ -2582,9 +2573,9 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    handleUpload: function handleUpload(image) {
-      console.log(image);
-      this.profile.posts.push(image);
+    handleUpload: function handleUpload(data) {
+      this.profile.posts.push(data.data);
+      this.openModal('Success!', data.message);
     },
     openPost: function openPost(post) {
       this.selectedPost = post;
@@ -7240,7 +7231,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".video-upload-title[data-v-b9a7df92] {\n  color: white !important;\n}\n.modal-body h1[data-v-b9a7df92] {\n  color: white;\n}\n.upload-img-div[data-v-b9a7df92] {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n}\n#blah[data-v-b9a7df92] {\n  position: absolute;\n  top: 0px;\n  left: 0;\n  z-index: 100;\n  width: 400px;\n  height: 400px;\n  -o-object-fit: contain;\n     object-fit: contain;\n}\nvideo[data-v-b9a7df92] {\n  width: 100%;\n  margin: 20px 0;\n}\n.video-upload[data-v-b9a7df92] {\n  height: 404px;\n  width: 99%;\n  border: 2px dashed #dbe0e6;\n  text-align: center;\n  position: relative;\n}\n.video-upload-cancel[data-v-b9a7df92], .video-upload-confirm[data-v-b9a7df92] {\n  width: calc(100% /2 - 25px);\n  text-transform: uppercase;\n  font-size: 14px;\n  background: transparent;\n  border: 0;\n  padding: 15px;\n}\n.video-upload-cancel[data-v-b9a7df92] {\n  background-color: #f9f9f9;\n  color: #354053;\n}\n.video-upload-confirm[data-v-b9a7df92] {\n  background-color: #354053;\n  color: white;\n}\n.video-upload-show img[data-v-b9a7df92] {\n  width: 100%;\n}\n.video-upload-image[data-v-b9a7df92] {\n  display: block;\n  margin: 20px auto 15px;\n}\n.video-upload i[data-v-b9a7df92] {\n  font-size: 26px;\n  display: block;\n  margin-bottom: 15px;\n}\n.video-upload-title[data-v-b9a7df92] {\n  font-size: 14px;\n  font-weight: 500;\n  font-style: normal;\n  font-stretch: normal;\n  line-height: 1.39;\n  letter-spacing: normal;\n  text-align: center;\n  color: #354053;\n  display: block;\n  margin-bottom: 10px;\n}\n.video-upload-description[data-v-b9a7df92] {\n  font-size: 12px;\n  font-weight: 500;\n  font-style: normal;\n  font-stretch: normal;\n  line-height: 1.79;\n  letter-spacing: normal;\n  text-align: center;\n  color: #a2abb3;\n  display: block;\n}\n.video-upload-input[data-v-b9a7df92] {\n  display: block;\n  margin-bottom: 20px;\n}\n.video-upload-input span[data-v-b9a7df92] {\n  color: #00A4FF;\n  font-weight: 600;\n}\n.video-upload-input input[data-v-b9a7df92] {\n  opacity: 0;\n  position: absolute;\n  bottom: 0;\n  cursor: pointer;\n  left: 0;\n  right: 0;\n  top: 0;\n  z-index: 1;\n  width: 100%;\n}\n.modal[data-v-b9a7df92] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  display: table;\n  transition: opacity 0.3s ease;\n}\n.modal h1[data-v-b9a7df92] {\n  text-align: center;\n  margin-bottom: 0;\n  text-transform: uppercase;\n}\n.modal-wrapper[data-v-b9a7df92] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n}\n.modal .mask[data-v-b9a7df92] {\n  background: rgba(0, 0, 0, 0.1);\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n}\n.modal-body[data-v-b9a7df92] {\n  margin: 0;\n}\n.modal-container[data-v-b9a7df92] {\n  background: #DFE1E6;\n  width: 500px;\n  border-radius: 5px;\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);\n  transition: all 0.3s ease;\n  margin: 0 auto;\n  padding: 20px 30px;\n}\n.modal-footer[data-v-b9a7df92] {\n  margin-top: 15px;\n}\n.modal-enter[data-v-b9a7df92], .modal-leave[data-v-b9a7df92] {\n  opacity: 0;\n}\n.modal-enter .modal-container[data-v-b9a7df92], .modal-leave .modal-container[data-v-b9a7df92] {\n  transform: scale(1.1);\n}\n.input-block[data-v-b9a7df92] {\n  margin: 25px 0;\n}\n.input-block .input-info[data-v-b9a7df92] {\n  font-size: 14px;\n  font-weight: 500;\n  font-style: normal;\n  font-stretch: normal;\n  line-height: normal;\n  letter-spacing: normal;\n  color: #354053;\n  display: block;\n  text-align: left;\n  margin-bottom: 5px;\n}\n.input-block .relative[data-v-b9a7df92] {\n  position: relative;\n}\n.input-block .relative input[data-v-b9a7df92],\n.input-block .relative textarea[data-v-b9a7df92] {\n  width: 100%;\n  box-sizing: border-box;\n  background-color: #f9f9f9;\n  outline: none;\n  border: 0;\n  padding: 15px;\n  font-family: Gotham Regular, sans-serif;\n  font-size: 12px;\n}\n.input-block .relative textarea[data-v-b9a7df92] {\n  min-height: 100px;\n  resize: none;\n}\n.input-block .red[data-v-b9a7df92] {\n  color: red;\n  font-size: 14px;\n}\n.button[data-v-b9a7df92] {\n  font-weight: 600;\n  background-color: #00A4FF;\n  color: white;\n  padding: 7px 14px;\n  border-radius: 2px;\n  outline: none;\n  border: 0;\n  text-transform: uppercase;\n  cursor: pointer;\n}", ""]);
+exports.push([module.i, ".post-upload-title[data-v-b9a7df92] {\n  color: white !important;\n}\n.modal-body h1[data-v-b9a7df92] {\n  color: white;\n}\n.upload-img-div[data-v-b9a7df92] {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n}\n#blah[data-v-b9a7df92] {\n  position: absolute;\n  top: 0px;\n  left: 0;\n  z-index: 100;\n  width: 400px;\n  height: 400px;\n  -o-object-fit: contain;\n     object-fit: contain;\n}\npost[data-v-b9a7df92] {\n  width: 100%;\n  margin: 20px 0;\n}\n.post-upload[data-v-b9a7df92] {\n  height: 404px;\n  width: 99%;\n  border: 2px dashed #dbe0e6;\n  text-align: center;\n  position: relative;\n}\n.post-upload-cancel[data-v-b9a7df92], .post-upload-confirm[data-v-b9a7df92] {\n  width: calc(100% /2 - 25px);\n  text-transform: uppercase;\n  font-size: 14px;\n  background: transparent;\n  border: 0;\n  padding: 15px;\n}\n.post-upload-cancel[data-v-b9a7df92] {\n  background-color: #f9f9f9;\n  color: #354053;\n}\n.post-upload-confirm[data-v-b9a7df92] {\n  background-color: #354053;\n  color: white;\n}\n.post-upload-show img[data-v-b9a7df92] {\n  width: 100%;\n}\n.post-upload-image[data-v-b9a7df92] {\n  display: block;\n  margin: 20px auto 15px;\n}\n.post-upload i[data-v-b9a7df92] {\n  font-size: 26px;\n  display: block;\n  margin-bottom: 15px;\n}\n.post-upload-title[data-v-b9a7df92] {\n  font-size: 14px;\n  font-weight: 500;\n  font-style: normal;\n  font-stretch: normal;\n  line-height: 1.39;\n  letter-spacing: normal;\n  text-align: center;\n  color: #354053;\n  display: block;\n  margin-bottom: 10px;\n}\n.post-upload-description[data-v-b9a7df92] {\n  font-size: 12px;\n  font-weight: 500;\n  font-style: normal;\n  font-stretch: normal;\n  line-height: 1.79;\n  letter-spacing: normal;\n  text-align: center;\n  color: #a2abb3;\n  display: block;\n}\n.post-upload-input[data-v-b9a7df92] {\n  display: block;\n  margin-bottom: 20px;\n}\n.post-upload-input span[data-v-b9a7df92] {\n  color: #00A4FF;\n  font-weight: 600;\n}\n.post-upload-input input[data-v-b9a7df92] {\n  opacity: 0;\n  position: absolute;\n  bottom: 0;\n  cursor: pointer;\n  left: 0;\n  right: 0;\n  top: 0;\n  z-index: 1;\n  width: 100%;\n}\n.modal[data-v-b9a7df92] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  display: table;\n  transition: opacity 0.3s ease;\n}\n.modal h1[data-v-b9a7df92] {\n  text-align: center;\n  margin-bottom: 0;\n  text-transform: uppercase;\n}\n.modal-wrapper[data-v-b9a7df92] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n}\n.modal .mask[data-v-b9a7df92] {\n  background: rgba(0, 0, 0, 0.1);\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n}\n.modal-body[data-v-b9a7df92] {\n  margin: 0;\n}\n.modal-container[data-v-b9a7df92] {\n  background: #DFE1E6;\n  width: 500px;\n  border-radius: 5px;\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);\n  transition: all 0.3s ease;\n  margin: 0 auto;\n  padding: 20px 30px;\n}\n.modal-footer[data-v-b9a7df92] {\n  margin-top: 15px;\n}\n.modal-enter[data-v-b9a7df92], .modal-leave[data-v-b9a7df92] {\n  opacity: 0;\n}\n.modal-enter .modal-container[data-v-b9a7df92], .modal-leave .modal-container[data-v-b9a7df92] {\n  transform: scale(1.1);\n}\n.input-block[data-v-b9a7df92] {\n  margin: 25px 0;\n}\n.input-block .input-info[data-v-b9a7df92] {\n  font-size: 14px;\n  font-weight: 500;\n  font-style: normal;\n  font-stretch: normal;\n  line-height: normal;\n  letter-spacing: normal;\n  color: #354053;\n  display: block;\n  text-align: left;\n  margin-bottom: 5px;\n}\n.input-block .relative[data-v-b9a7df92] {\n  position: relative;\n}\n.input-block .relative input[data-v-b9a7df92],\n.input-block .relative textarea[data-v-b9a7df92] {\n  width: 100%;\n  box-sizing: border-box;\n  background-color: #f9f9f9;\n  outline: none;\n  border: 0;\n  padding: 15px;\n  font-family: Gotham Regular, sans-serif;\n  font-size: 12px;\n}\n.input-block .relative textarea[data-v-b9a7df92] {\n  min-height: 100px;\n  resize: none;\n}\n.input-block .red[data-v-b9a7df92] {\n  color: red;\n  font-size: 14px;\n}\n.button[data-v-b9a7df92] {\n  border: none;\n  font-weight: 600;\n  background-color: #00A4FF;\n  color: white;\n  padding: 7px 14px;\n  border-radius: 2px;\n  outline: none;\n  border: 0;\n  text-transform: uppercase;\n  cursor: pointer;\n}", ""]);
 
 // exports
 
@@ -7355,25 +7346,6 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 // module
 exports.push([module.i, "\n.profile__picture[data-v-299e239e]{\n    width: 400px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css&":
-/*!******************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css& ***!
-  \******************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n#follow-btn[data-v-426ba0ae]{\n    padding: 5px 10px;\n    border-radius: 3px;\n    border-style: solid;\n    border-width: 1px;\n    font-size: 14px;\n    font-weight: 600;\n    line-height: 26px;\n    outline: 0;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    white-space: nowrap;\n    width: 100%;\n    background: #0095f6;\n    color: #fff;\n}\n", ""]);
 
 // exports
 
@@ -38700,36 +38672,6 @@ if(false) {}
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css&":
-/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css& ***!
-  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css&");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
 /***/ "./node_modules/style-loader/lib/addStyles.js":
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
@@ -39329,119 +39271,153 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "modal" }, [
-    _c("span", {
-      staticClass: "mask",
-      on: {
-        click: function($event) {
-          return _vm.$emit("closeConfirmation")
+  return _c(
+    "div",
+    { staticClass: "modal" },
+    [
+      _c("span", {
+        staticClass: "mask",
+        on: {
+          click: function($event) {
+            return _vm.$emit("closeConfirmation")
+          }
         }
-      }
-    }),
-    _vm._v(" "),
-    _c("div", { staticClass: "modal-wrapper" }, [
-      _c("div", { staticClass: "modal-container" }, [
-        _c("div", { staticClass: "modal-body" }, [
-          _c("h1", [_vm._v("Image uploader")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "input-block" }, [
-            _c("div", { staticClass: "relative" }, [
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.description,
-                    expression: "description"
-                  }
-                ],
-                attrs: { placeholder: "Enter Description...", type: "text" },
-                domProps: { value: _vm.description },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "modal-wrapper" }, [
+        _c("div", { staticClass: "modal-container" }, [
+          _c("div", { staticClass: "modal-body" }, [
+            _c("h1", [_vm._v("Image uploader")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "input-block" }, [
+              _c("div", { staticClass: "relative" }, [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.description,
+                      expression: "description"
                     }
-                    _vm.description = $event.target.value
+                  ],
+                  attrs: { placeholder: "Enter Description...", type: "text" },
+                  domProps: { value: _vm.description },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.description = $event.target.value
+                    }
                   }
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("form", { attrs: { id: "form1", runat: "server" } }, [
-            _c("div", { staticClass: "video-upload input-block" }, [
-              _vm.imgAttached
-                ? _c("img", {
-                    attrs: { id: "blah", src: "#", alt: "your image" }
-                  })
-                : _vm._e(),
-              _vm._v(" "),
-              !_vm.imgAttached
-                ? _c("div", { staticClass: "upload-img-div" }, [
-                    _c("img", {
-                      staticClass: "video-upload-image",
-                      attrs: { src: "/images/upload.png" }
-                    }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "video-upload-title" }, [
-                      _vm._v("Upload Image")
-                    ]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "video-upload-input" }, [
-                      _c("span", [_vm._v("browse")]),
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("form", { attrs: { id: "form1", runat: "server" } }, [
+              _c("div", { staticClass: "post-upload input-block" }, [
+                _vm.imgAttached
+                  ? _c("img", {
+                      attrs: { id: "blah", src: "#", alt: "your image" }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.imgAttached
+                  ? _c("div", { staticClass: "upload-img-div" }, [
+                      _c("img", {
+                        staticClass: "post-upload-image",
+                        attrs: { src: "/images/upload.png" }
+                      }),
                       _vm._v(" "),
-                      _c("input", {
-                        ref: "image",
-                        attrs: {
-                          id: "imgInp",
-                          type: "file",
-                          accept: "image/x-png,image/gif,image/jpeg"
-                        },
-                        on: {
-                          change: function($event) {
-                            return _vm.readURL()
+                      _c("span", { staticClass: "post-upload-title" }, [
+                        _vm._v("Upload Image")
+                      ]),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "post-upload-input" }, [
+                        _c("span", [_vm._v("browse")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          ref: "image",
+                          attrs: {
+                            id: "imgInp",
+                            type: "file",
+                            accept: "image/x-png,image/gif,image/jpeg"
+                          },
+                          on: {
+                            change: function($event) {
+                              return _vm.readURL()
+                            }
                           }
-                        }
-                      })
+                        })
+                      ])
                     ])
-                  ])
-                : _vm._e()
-            ])
-          ]),
-          _vm._v(" "),
-          _vm.imgAttached
-            ? _c(
-                "div",
-                {
-                  staticStyle: {
-                    display: "flex",
-                    "justify-content": "space-between"
-                  }
-                },
-                [
-                  _c(
-                    "button",
-                    { staticClass: "button", on: { click: _vm.addVideo } },
-                    [_vm._v("Save")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    { staticClass: "button", on: { click: _vm.removeImage } },
-                    [_vm._v("Remove")]
-                  )
-                ]
-              )
-            : _vm._e()
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.imgAttached
+              ? _c(
+                  "div",
+                  {
+                    staticStyle: {
+                      display: "flex",
+                      "justify-content": "space-between"
+                    }
+                  },
+                  [
+                    !_vm.pingingApi
+                      ? _c(
+                          "span",
+                          {
+                            staticClass: "api-button",
+                            on: { click: _vm.addPost }
+                          },
+                          [_vm._v("Save")]
+                        )
+                      : _c("div", { staticClass: "api-button" }, [
+                          _c("span", { staticClass: "button-loader" })
+                        ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      { staticClass: "button", on: { click: _vm.removeImage } },
+                      [_vm._v("Remove")]
+                    )
+                  ]
+                )
+              : _vm._e()
+          ])
         ])
-      ])
-    ]),
-    _vm._v(" "),
-    _vm.showLoader
-      ? _c("img", { attrs: { src: "/images/loader.gif", alt: "loader" } })
-      : _vm._e()
-  ])
+      ]),
+      _vm._v(" "),
+      _vm.isSuccess
+        ? _c(
+            "success-modal",
+            {
+              on: {
+                close: function($event) {
+                  _vm.isSuccess = false
+                }
+              }
+            },
+            [
+              _c(
+                "span",
+                { attrs: { slot: "success-title" }, slot: "success-title" },
+                [_vm._v(_vm._s(_vm.title))]
+              ),
+              _vm._v(" "),
+              _c(
+                "span",
+                { attrs: { slot: "success-info" }, slot: "success-info" },
+                [_vm._v(_vm._s(_vm.message))]
+              )
+            ]
+          )
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -39700,18 +39676,22 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "row-input" }, [
-                  _c(
-                    "span",
-                    {
-                      staticClass: "buttons",
-                      on: {
-                        click: function($event) {
-                          return _vm.updateProfile()
-                        }
-                      }
-                    },
-                    [_vm._v("Submit")]
-                  )
+                  !_vm.pingingApi
+                    ? _c(
+                        "span",
+                        {
+                          staticClass: "api-button",
+                          on: {
+                            click: function($event) {
+                              return _vm.updateProfile()
+                            }
+                          }
+                        },
+                        [_vm._v("Submit")]
+                      )
+                    : _c("div", { staticClass: "api-button" }, [
+                        _c("span", { staticClass: "button-loader" })
+                      ])
                 ])
               ])
             : _vm._e(),
@@ -39903,18 +39883,22 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "row-input" }, [
-                  _c(
-                    "span",
-                    {
-                      staticClass: "buttons",
-                      on: {
-                        click: function($event) {
-                          return _vm.updateProfile()
-                        }
-                      }
-                    },
-                    [_vm._v("Change Password")]
-                  )
+                  !_vm.pingingApi
+                    ? _c(
+                        "span",
+                        {
+                          staticClass: "api-button",
+                          on: {
+                            click: function($event) {
+                              return _vm.updateProfile()
+                            }
+                          }
+                        },
+                        [_vm._v("Submit")]
+                      )
+                    : _c("div", { staticClass: "api-button" }, [
+                        _c("span", { staticClass: "button-loader" })
+                      ])
                 ])
               ])
             : _vm._e()
@@ -40032,11 +40016,15 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "button",
-        { attrs: { id: "follow-btn" }, on: { click: _vm.toggleFollow } },
-        [_vm._v(_vm._s(_vm.follow))]
-      ),
+      !_vm.pingingApi
+        ? _c(
+            "span",
+            { staticClass: "api-button", on: { click: _vm.toggleFollow } },
+            [_vm._v(_vm._s(_vm.follow))]
+          )
+        : _c("div", { staticClass: "api-button" }, [
+            _c("span", { staticClass: "button-loader" })
+          ]),
       _vm._v(" "),
       _vm.isSuccess
         ? _c(
@@ -53117,9 +53105,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _FollowButton_vue_vue_type_template_id_426ba0ae_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FollowButton.vue?vue&type=template&id=426ba0ae&scoped=true& */ "./resources/js/components/FollowButton.vue?vue&type=template&id=426ba0ae&scoped=true&");
 /* harmony import */ var _FollowButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FollowButton.vue?vue&type=script&lang=js& */ "./resources/js/components/FollowButton.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _FollowButton_vue_vue_type_style_index_0_id_426ba0ae_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css& */ "./resources/js/components/FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -53127,7 +53113,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _FollowButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _FollowButton_vue_vue_type_template_id_426ba0ae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
   _FollowButton_vue_vue_type_template_id_426ba0ae_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -53156,22 +53142,6 @@ component.options.__file = "resources/js/components/FollowButton.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./FollowButton.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowButton.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css&":
-/*!***********************************************************************************************************!*\
-  !*** ./resources/js/components/FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css& ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowButton_vue_vue_type_style_index_0_id_426ba0ae_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FollowButton.vue?vue&type=style&index=0&id=426ba0ae&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowButton_vue_vue_type_style_index_0_id_426ba0ae_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowButton_vue_vue_type_style_index_0_id_426ba0ae_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowButton_vue_vue_type_style_index_0_id_426ba0ae_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowButton_vue_vue_type_style_index_0_id_426ba0ae_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FollowButton_vue_vue_type_style_index_0_id_426ba0ae_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
