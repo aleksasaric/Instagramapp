@@ -4,7 +4,7 @@
         <div class="modal-wrapper">
             <div class="modal-container">
                 <div class="modal-body">
-                    <h1>Upload Image</h1>
+                    <h1>Image uploader</h1>
                     <div class="input-block">
                         <!--<span class="input-info">Description</span>-->
                         <div class="relative">
@@ -26,7 +26,7 @@
                     </form>
                     <div v-if="imgAttached" style="display: flex; justify-content: space-between">
                         <button @click="addVideo"  class="button">Save</button>
-                        <button  @click="removeImage"  class="button">Remove Image</button>
+                        <button  @click="removeImage"  class="button">Remove</button>
                     </div>
                 </div>
             </div>
@@ -126,8 +126,8 @@
         top: 0px;
         left: 0;
         z-index:100;
-        width: 100%;
-        height: 100%;
+        width: 400px;
+        height: 400px;
         object-fit: contain;
     }
     video{
@@ -135,7 +135,8 @@
         margin: 20px 0;
     }
     .video-upload{
-        height: 500px;
+        height: 404px;
+        width: 99%;
         border: 2px dashed #dbe0e6;
         text-align: center;
         position: relative;
@@ -197,7 +198,8 @@
             display: block;
             margin-bottom: 20px;
             span{
-                color: #235dfe;
+                color: #00A4FF;
+                font-weight: 600;
             }
             input{
                 opacity: 0;
@@ -232,7 +234,7 @@
             justify-content: center;
         }
         .mask{
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
             left: 0;
@@ -243,8 +245,8 @@
             margin: 0;
         }
         &-container {
-            background: #fff;
-            width: 750px;
+            background: #DFE1E6;
+            width: 500px;
             border-radius: 5px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
             transition: all .3s ease;
@@ -306,9 +308,10 @@
         }
     }
     .button{
-        background-color: #354053;
+        font-weight: 600;
+        background-color: #00A4FF;
         color: white;
-        padding: 13px 20px;
+        padding: 7px 14px;
         border-radius: 2px;
         outline: none;
         border: 0;

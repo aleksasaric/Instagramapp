@@ -49,7 +49,6 @@ class ProfileController extends ApiController
         if ($data['password']) {
             if (!$this->checkForPassword($data, $authUser)) return $this->respondWithError('Wrong password');
             if ($data['password'] !== $data['confirm_password']) return $this->respondWithError('Password are not matching');
-
             $authUser->password = bcrypt($data['password']);
             $authUser->save();
         }
@@ -57,10 +56,10 @@ class ProfileController extends ApiController
         $profile = $this->profile->insertOrUpdate($data, $data['id']);
 
         if (!$profile){
-           return $this->respondWithError();
+           return $this->respondWithError('Whoops, error happened during saving. Try again later.');
         }
 
-        return $this->respondCreated($profile);
+        return $this->respondCreated('Successfully updated profile!', $profile);
         
     }
 
@@ -99,10 +98,13 @@ class ProfileController extends ApiController
         $friend = $this->profile->getById($data['friend_id']);
 
 
-        Mail::to($friend)->send(new NewFriend($profile, $friend));
+        if ($profile->friends()->where('profile_id', $profile->id)->exists()) {
 
-//        new Mail(NewFriend::class);
-        return $this->respondCreated('Successfully following');
+            Mail::to($friend)->send(new NewFriend($profile, $friend));
+            return $this->respondCreated('Successfully following ' . $friend->name);
+        }
+
+        return $this->respondCreated('Successfully unfollowed ' . $friend->name);
     }
 
 }

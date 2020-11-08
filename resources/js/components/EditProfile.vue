@@ -13,11 +13,12 @@
 
                     <div class="row-input-header">
                         <div class="img-container">
-                            <img src="/storage/images/aleksa.jpg" alt="">
+                            <img :src="'/storage/' + profile.image" alt="profile image">
                         </div>
                         <div class="change-picture">
                             <p class="change-picture-name">{{ this.prof.username }}</p>
-                            <p class="change-picture-profile">Change Profile Photo</p>
+                            <p onclick="document.getElementById('avatar-uploader').click()" class="change-picture-profile">Change Profile Photo</p>
+                            <input @change="handleUpload" style="display:none" id="avatar-uploader" ref="avatar" type="file" accept="image/x-png,image/gif,image/jpeg" name="avatar">
                         </div>
                     </div>
 
@@ -38,15 +39,11 @@
                         <input v-model="editProfile.bio"  id="row4" type="text">
                     </div>
                     <div class="row-input">
-                        <label for="row5">Email</label>
-                        <input v-model="editProfile.email" id="row5" type="email">
-                    </div>
-                    <div class="row-input">
                         <label for="row6">Gender</label>
                         <input v-model="editProfile.gender" id="row6" type="text">
                     </div>
                     <div class="row-input">
-                       <button @click="updateProfile()">Submit</button>
+                       <span class="buttons" @click="updateProfile()">Submit</span>
                     </div>
                     <!--</div>-->
                 </div>
@@ -83,17 +80,15 @@
                         <input required v-model="editProfile.confirmPassword" id="password-conform" type="password">
                     </div>
                     <div class="row-input">
-                        <button @click="updateProfile()">Change Password</button>
+                        <span class="buttons" @click="updateProfile()">Change Password</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div v-if="showSuccess">
-            <success-alert></success-alert>
-        </div>
-        <div v-if="showError">
-            <error-alert :message="this.errorMessage" @alertClose="closeAlert()"></error-alert>
-        </div>
+        <success-modal @close="isSuccess = false" v-if="isSuccess">
+            <span slot="success-title">{{title}}</span>
+            <span slot="success-info">{{message}}</span>
+        </success-modal>
     </div>
 </template>
 
@@ -105,10 +100,12 @@
         },
         data(){
             return {
+                file: null,
+                isSuccess: false,
+                title: '',
+                message: '',
                 activeTab: 1,
                 errorMessage: '',
-                showError: false,
-                showSuccess: false,
                 profile: this.prof,
                 editProfile:{
                     password: '',
@@ -118,18 +115,38 @@
             }
         },
         methods:{
-            closeAlert(){
-              this.showError = false;
-              this.showSuccess = false;
-              this.errorMessage = '';
+            openModal(title, message){
+                this.isSuccess = true;
+                this.title = title;
+                this.message = message;
+                setTimeout(() => {
+                    this.isSuccess = false;
+                }, 5000);
+            },
+            handleUpload(e){
+                let files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.file = files[0];
+                let formData = new FormData();
+                formData.append('profile_id', this.profile.id);
+                formData.append('image', this.file);
+                axios.post('/api/v1/avatar', formData).then( response => {
+                    if (response.data.status_code === 201) {
+                        this.profile = response.data.data;
+                        this.openModal('Success!', response.data.message);
+                    }
+                    else{
+                        this.openModal('Error!', response.data.message);
+                    }
+                });
             },
             activateTab(tabNumber){
                 this.activeTab = tabNumber;
             },
             passwordMatch(){
                 if (this.editProfile.password !== this.editProfile.confirmPassword) {
-                    this.showError = true;
-                    this.errorMessage = 'Password do not match';
+                    this.openModal('Error!', 'Password do not match.');
                     return false;
                 }
                 return true;
@@ -140,9 +157,14 @@
                 }
                 axios.post('/api/v1/profile/update', this.editProfile)
                     .then(response => {
-                        console.log('here');
                         if(response.data.status_code === 201) {
-                            console.log('201');
+                            this.openModal('Success!', response.data.message);
+                            this.profile = response.data.data;
+                            if (this.profile.username !== response.data.data.username){
+                                location.reload();
+                            }
+                        }else{
+                            this.openModal('Error!', response.data.message);
                         }
                     });
             },
@@ -157,7 +179,6 @@
             this.$set(this.editProfile, 'image', this.prof.image);
             this.$set(this.editProfile, 'website', this.prof.website);
             this.$set(this.editProfile, 'bio', this.prof.bio);
-            this.$set(this.editProfile, 'email', this.prof.email);
             this.$set(this.editProfile, 'gender', this.prof.gender);
             this.$set(this.editProfile, 'privateAccount', this.prof.is_private);
             this.$set(this.editProfile, 'user_id', this.prof.user_id);
@@ -241,6 +262,15 @@
     }
     .tab-2-active{
         padding: 40px;
+    }
+    .buttons{
+        background: #00A4FF;
+        color: #FFFFFF;
+        padding: 6px 12px;
+        border-radius: 3px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
     }
 
 </style>

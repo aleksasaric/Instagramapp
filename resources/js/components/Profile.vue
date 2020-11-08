@@ -43,6 +43,10 @@
             </div>
 
         </div>
+        <success-modal @close="isSuccess = false" v-if="isSuccess">
+            <span slot="success-title">{{title}}</span>
+            <span slot="success-info">{{message}}</span>
+        </success-modal>
         <transition name="fade" mode="out-in">
             <post-modal v-if="showImageModal" :profile="this.profile" :post="this.selectedPost"  @closeConfirmation="showImageModal = false">
             </post-modal>
@@ -70,6 +74,9 @@
         },
         data(){
             return {
+                isSuccess:false,
+                message: '',
+                title: '',
                 imageUploaded: null,
                 profile: this.prof,
                 showImageModal: false,
@@ -78,6 +85,14 @@
             }
         },
         methods:{
+            openModal(title, message){
+                this.isSuccess = true;
+                this.title = title;
+                this.message = message;
+                setTimeout(() => {
+                    this.isSuccess = false;
+                }, 5000);
+            },
             addOrRemoveFollower($var) {
                 this.$set(this.profile, 'befriended_by_count', $var > 0 ? this.profile.befriended_by_count + 1 : this.profile.befriended_by_count - 1);
             },
@@ -93,22 +108,14 @@
                 let data = new FormData();
                 data.append('image', img);
                 data.append('profile_id', this.profile.id);
-                axios.post('/api/v1/post/avatar', data, headers)
+                axios.post('/api/v1/avatar', data, headers)
                     .then(response => {
                         if(response.data.status_code === 201) {
-                            this.$set(this.profile, 'image', response.data.data.image)
+                            this.$set(this.profile, 'image', response.data.data.image);
+                            this.openModal('Success!', response.data.message);
                         }
-                        if(response.data.status_code === 422) {
-                            $this.$swal({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                title: 'Error!',
-                                text: response.data.message,
-                                timer: 3000
-                            });
-                            $this.showLoader = false;
-                            $this.showVideo = false;
+                        else{
+                            this.openModal('Error!', response.data.message);
                         }
                     })
 
