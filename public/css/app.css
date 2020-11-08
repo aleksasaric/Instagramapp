@@ -10889,10 +10889,16 @@ a.text-dark:focus {
 }
 
 * {
+  font-family: "Gotham Book", sans-serif;
   text-decoration: none;
   margin: 0;
   padding: 0;
   list-style: none;
+  letter-spacing: 1px;
+}
+
+a {
+  text-decoration: none !important;
 }
 
 p {
@@ -10956,6 +10962,10 @@ p {
     transform: translate3d(0, -100%, 0);
     visibility: hidden;
   }
+}
+
+.navbar-nav {
+  align-items: center;
 }
 
 .slideOutUp {

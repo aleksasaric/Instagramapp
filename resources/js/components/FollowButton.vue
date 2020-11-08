@@ -1,6 +1,10 @@
 <template>
     <div>
         <button @click="toggleFollow" id="follow-btn">{{follow}}</button>
+        <success-modal @close="isSuccess = false" v-if="isSuccess">
+            <span slot="success-title">{{title}}</span>
+            <span slot="success-info">{{message}}</span>
+        </success-modal>
     </div>
 </template>
 
@@ -13,6 +17,9 @@
         },
         data(){
             return {
+                isSuccess: false,
+                title: '',
+                message: '',
                 followProfile: false,
                 followAdder: 0
             }
@@ -29,6 +36,14 @@
             })
         },
         methods:{
+            openModal(title, message){
+                this.isSuccess = true;
+                this.title = title;
+                this.message = message;
+                setTimeout(() => {
+                    this.isSuccess = false;
+                }, 5000);
+            },
             toggleFollow(){
                 let formData = new FormData();
                 formData.append('profile_id', this.profile.id);
@@ -37,8 +52,11 @@
                 axios.post('/api/v1/toggleFollow', formData).then(resp=>{
                     if (resp.data.status_code === 201){
                         this.followProfile = !this.followProfile;
-                        // this.followAdder = this.followProfile ? 1 : -1;
+                        this.openModal('Success!', resp.data.message);
                         this.$emit('followAdder', this.followProfile ? 1 : -1);
+                    }
+                    else{
+                        this.openModal('Error!', resp.data.message);
                     }
                 });
             }

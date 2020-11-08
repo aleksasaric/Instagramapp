@@ -22,6 +22,7 @@ Route::post('/profile/update', 'Api\ProfileController@update');
 Route::get('/follows', 'Api\ProfileController@follows');
 Route::post('/toggleFollow', 'Api\ProfileController@toggleFollows');
 Route::post('/post', 'Api\PostController@store');
-Route::post('/post/avatar', 'Api\PostController@storeAvatar');
+//Route::post('/post/avatar', 'Api\PostController@storeAvatar');
+Route::post('/avatar', 'Api\AvatarController');
 
 
