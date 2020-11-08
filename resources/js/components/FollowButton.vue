@@ -1,6 +1,10 @@
 <template>
     <div>
-        <button @click="toggleFollow" id="follow-btn">{{follow}}</button>
+        <span v-if="!pingingApi" @click="toggleFollow" class="api-button">{{follow}}</span>
+        <div class="api-button" v-else>
+            <span class="button-loader"></span>
+        </div>
+
         <success-modal @close="isSuccess = false" v-if="isSuccess">
             <span slot="success-title">{{title}}</span>
             <span slot="success-info">{{message}}</span>
@@ -17,6 +21,7 @@
         },
         data(){
             return {
+                pingingApi: false,
                 isSuccess: false,
                 title: '',
                 message: '',
@@ -25,6 +30,7 @@
             }
         },
         created(){
+            this.pingingApi = true;
             axios.get('/api/v1/follows', {
                 params: {
                     profile_id: this.profile.id,
@@ -32,7 +38,7 @@
                 }
             }).then(response=>{
                 this.followProfile = response.data.data;
-                console.log(response);
+                this.pingingApi = false;
             })
         },
         methods:{
@@ -45,6 +51,7 @@
                 }, 5000);
             },
             toggleFollow(){
+                this.pingingApi = true;
                 let formData = new FormData();
                 formData.append('profile_id', this.profile.id);
                 formData.append('friend_id', this.friend.id);
@@ -58,6 +65,7 @@
                     else{
                         this.openModal('Error!', resp.data.message);
                     }
+                    this.pingingApi = false;
                 });
             }
         },
@@ -71,24 +79,4 @@
 </script>
 
 <style scoped>
-    #follow-btn{
-        padding: 5px 10px;
-        border-radius: 3px;
-        border-style: solid;
-        border-width: 1px;
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 26px;
-        outline: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        white-space: nowrap;
-        width: 100%;
-        background: #0095f6;
-        color: #fff;
-    }
 </style>

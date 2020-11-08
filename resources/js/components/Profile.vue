@@ -120,10 +120,9 @@
                     })
 
             },
-            handleUpload(image){
-                console.log(image);
-                this.profile.posts.push(image);
-
+            handleUpload(data){
+                this.profile.posts.push(data.data);
+                this.openModal('Success!', data.message);
             },
             openPost(post){
                 this.selectedPost = post;
