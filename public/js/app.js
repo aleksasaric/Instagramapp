@@ -1997,6 +1997,8 @@ __webpack_require__.r(__webpack_exports__);
           _this2.$emit('imageUploaded', response.data);
 
           _this2.$emit('closeConfirmation');
+        } else {
+          _this2.openModal('Error!', response.data.message);
         }
 
         _this2.pingingApi = false;
