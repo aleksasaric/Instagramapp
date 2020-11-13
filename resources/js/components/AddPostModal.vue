@@ -84,7 +84,9 @@
                         if(response.data.status_code === 201) {
                             this.$emit('imageUploaded', response.data);
                             this.$emit('closeConfirmation');
-
+                        }
+                        else{
+                            this.openModal('Error!', response.data.message);
                         }
                         this.pingingApi = false;
                     })

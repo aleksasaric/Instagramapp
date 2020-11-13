@@ -8,6 +8,7 @@ use App\Mail\NewFriend;
 use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ProfileController extends ApiController
@@ -98,9 +99,13 @@ class ProfileController extends ApiController
         $friend = $this->profile->getById($data['friend_id']);
 
 
-        if ($profile->friends()->where('profile_id', $profile->id)->exists()) {
+        if ($profile->friends()->where('profile_id', $profile->id)->where('friend_id', $friend->id)->exists()) {
 
-            Mail::to($friend)->send(new NewFriend($profile, $friend));
+            try {
+                Mail::to($friend)->send(new NewFriend($profile, $friend));
+            }catch (\Exception $exception){
+                Log::info('Error sending mail:' . $exception->getMessage());
+            }
             return $this->respondCreated('Successfully following ' . $friend->name);
         }
 
